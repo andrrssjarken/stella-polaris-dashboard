@@ -17,7 +17,6 @@ const AppRouter = () => (
         <Route exact path="/" render={() => (
             <Redirect to="/dashboard/" />
         )} />
-
         <Route path="/dashboard/" exact component={Dashboard} />
         <Route path="/dashboard-fryselager/" component={DashboardFryselager} />
         <Route path="/dashboard-kokeprosess/" component={DashboardKokeprosess}/>

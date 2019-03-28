@@ -9,6 +9,7 @@ import KompressorTabell from '../components/KompressorTabell';
 import ChartEnergiforbruk from '../components/ChartEnergiforbruk';
 import ChartTempFryselager from '../components/ChartTempFryselager';
 
+
 class DashboardFryselager extends React.Component {
     state = {
         sideMenu: true,
@@ -64,7 +65,7 @@ class DashboardFryselager extends React.Component {
                         </Col>
                         <Col lg={2}>
                         <div className="generate-report-placer">
-                            <Button variant="outline-primary" className="generate-report-btn">Generer rapport</Button>
+                            <Button variant="outline-primary" className="generate-report-btn">{}Generer rapport</Button>
                         </div>
                         </Col>
                     </div>
