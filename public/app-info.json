@@ -1,0 +1,31 @@
+{
+  "displayName": "Stella Polaris Dashboard",
+  "appVersion": "1.0.0",
+  "appCopyright": "© AEJ 2018",
+  "links": {
+    "default": [
+      {
+        "type": "WWW",
+        "name": "Application manual",
+        "value": "https://anbmedia.no"
+      },
+      {
+        "type": "WWW",
+        "name": "Developer information",
+        "value": "https://anbmedia.no"
+      },
+      {
+        "type": "WWW",
+        "name": "About Stella Polaris",
+        "value": "http://www.stellapolaris.no/"
+      }
+    ],
+    "no": [
+      {
+        "type": "WWW",
+        "name": "Utviklerinformasjon",
+        "value": "https://anbmedia.no"
+      }
+    ]
+  }
+}
