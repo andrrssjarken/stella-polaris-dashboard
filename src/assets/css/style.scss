@@ -35,7 +35,7 @@ Table Of Content
 $body-font-family: 'Roboto', sans-serif;
 $body-bg-color: #f3f6f9;
 $template-text-color: #47404f;
-$primary-color: #00294f !default;
+$primary-color: #00294f;
 $pragraph-color: #797979;
 $border-color: #ebebee;
 $danger-color: #ff3547;
@@ -430,6 +430,23 @@ button:focus {
 }
 .badge-warning {
     color: #fff;
+}
+.btn-primary {
+    background-color: $primary-color;
+    border-color: $primary-color;
+    &:hover {
+        background-color: $primary-color;
+        border-color: $primary-color;
+        opacity: .7;
+    }
+}
+.btn-outline-primary {
+    color: $primary-color;
+    border-color: $primary-color;
+    &:hover {
+        background-color: $primary-color;
+        border-color: $primary-color;
+    }
 }
 /* End helper class */
 
@@ -974,6 +991,16 @@ button:focus {
         }
     }
 }
+.page-link {
+    color: $primary-color;
+    &:hover {
+        color: #000;
+    }
+}
+.page-item.active .page-link {
+    background-color: $primary-color;
+    border-color: $primary-color;
+}
 /* End search result style */
 
 /* Notifications page style */
@@ -1516,12 +1543,12 @@ button:focus {
             border-radius: 0px;
             color: #47404f;
             &:hover {
-                color: #00294f;
+                color: $primary-color;
                 background-color: #fff;
             }
         }
         .nav-link.active {
-            color: #00294f;
+            color: $primary-color;
             background-color: #fff;
         }
     }
@@ -1549,7 +1576,7 @@ textarea.form-control {
                     content: '';
                     position: absolute;
                     right: -18px;
-                    background: #00294f;
+                    background: $primary-color;
                     height: 15px;
                     width: 40px;
                     -webkit-transform: rotate(90deg);
@@ -1588,7 +1615,7 @@ textarea.form-control {
                 content: '';
                 position: absolute;
                 right: -18px;
-                background: #00294f;
+                background: $primary-color;
                 height: 15px;
                 width: 40px;
                 -webkit-transform: rotate(90deg);
@@ -2393,9 +2420,9 @@ textarea.form-control {
         }
         button.active {
             color: #fff;
-            background: #008FFB;
-            border: 1px solid blue;
-            border-bottom: 2px solid blue;
+            background: $primary-color;
+            border: 1px solid $primary-color;
+            border-bottom: 2px solid $primary-color;
         }
     } 
 }
@@ -2596,6 +2623,12 @@ textarea.form-control {
     p {
         margin: 0;
         color: #5a5151;
+        a {
+            color: $primary-color;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
     }
 }
 /* End Footer Style */

@@ -117,7 +117,7 @@ $gray-color: #a1aab2;
             &:active {
                 background-color: transparent;
                 border-color: transparent;
-                color: #0062cc;
+                color: $primary-color;
             }
             &:focus {
                 box-shadow: none !important;
