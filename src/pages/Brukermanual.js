@@ -46,7 +46,7 @@ class Faq extends React.Component {
                     <Row> 
                         <Col lg={12}>
                             <Accordion className="custom-accordion mb-4">
-                                <h4 className="heading"></h4>
+
                                 <AccordionItem>
                                     
                                     <AccordionItemTitle>

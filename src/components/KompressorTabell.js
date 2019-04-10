@@ -1,8 +1,10 @@
 import React from 'react';
-import { Table, Button } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 
 class KompressorTabell extends React.Component {
+
     render() {
+
         return (
             <div className="card mb-4">
                 <div className="card-body">
@@ -21,41 +23,48 @@ class KompressorTabell extends React.Component {
                         </thead>
 
                         <tbody>
+
                             {/* Compressor 1 */}
-                            <tr>
+                            <tr>                            
                                 <td className="text-center">
-                                    <span className="badge badge-success">Aktiv</span>
+                                    {this.props.k1_status === true && <span className="badge badge-success">Aktiv</span>}
+                                    {this.props.k1_status === false && <span className="badge badge-warning">Inaktiv</span>}                        
                                 </td>
                                 <td>Kompressor 1</td>
-                                <td className="text-center">700 timer</td>
-                                <td className="text-center">900 kWh</td>
+                                <td className="text-center">{this.props.k1_driftstid} timer</td>
+                                <td className="text-center">{this.props.k1_forbruk} kWh</td>
                             </tr>
+
                             {/* Compressor 2 */}
                             <tr>
                                 <td className="text-center">
-                                    <span className="badge badge-warning">Ikke aktiv</span>
+                                    {this.props.k2_status === true && <span className="badge badge-success">Aktiv</span>}
+                                    {this.props.k2_status === false && <span className="badge badge-warning">Inaktiv</span>}
                                 </td>
                                 <td>Kompressor 2</td>
-                                <td className="text-center">650 timer</td>
-                                <td className="text-center">685 kWh</td>
+                                <td className="text-center">{this.props.k2_driftstid} timer</td>
+                                <td className="text-center">{this.props.k2_forbruk} kWh</td>
                             </tr>
+
                             {/* Compressor 3 */}
                             <tr>
                                 <td className="text-center">
-                                    <span className="badge badge-warning">Ikke aktiv</span>
+                                    {this.props.k3_status === true && <span className="badge badge-success">Aktiv</span>}
+                                    {this.props.k3_status === false && <span className="badge badge-warning">Inaktiv</span>}
                                 </td>
                                 <td>Kompressor 3</td>
-                                <td className="text-center">850 timer</td>
-                                <td className="text-center">1050 kWh</td>
+                                <td className="text-center">{this.props.k3_driftstid} timer</td>
+                                <td className="text-center">{this.props.k3_forbruk} kWh</td>
                             </tr>
                             {/* Compressor 4 */}
                             <tr>
                                 <td className="text-center">
-                                    <span className="badge badge-success">Aktiv</span>
+                                    {this.props.k4_status === true && <span className="badge badge-success">Aktiv</span>}
+                                    {this.props.k4_status === false && <span className="badge badge-warning">Inaktiv</span>}
                                 </td>
                                 <td>Kompressor 4</td>
-                                <td className="text-center">950 timer</td>
-                                <td className="text-center">250 kWh</td>
+                                <td className="text-center">{this.props.k4_driftstid} timer</td>
+                                <td className="text-center">{this.props.k4_forbruk} kWh</td>
                             </tr>
                         </tbody>
                     </Table>

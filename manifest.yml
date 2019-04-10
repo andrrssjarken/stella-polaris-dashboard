@@ -1,0 +1,6 @@
+applications:
+- name: stell-apolaris-dashboard
+  stack: cflinuxfs3
+  instances: 1
+  random-route: true
+  memory: 512MB

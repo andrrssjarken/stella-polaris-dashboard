@@ -1,10 +1,9 @@
 import React from 'react';
-import { withRouter, Link, NavLink } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import './Navigation.css';
 import {
     Navbar, 
     Nav, 
-    Button, 
     Image
 } from 'react-bootstrap';
 

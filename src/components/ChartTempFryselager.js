@@ -349,8 +349,11 @@ const series =
     }
 }
 
+const textar = 'Mark'
+
 class ChartTempFryselager extends React.Component {
     constructor(props) {
+        
         super(props);
         this.state = {
             options: {
@@ -372,7 +375,7 @@ class ChartTempFryselager extends React.Component {
                                 color: '#fff',
                                 background: '#FF4560',
                             },
-                            text: 'Bemerkning',
+                            text: textar,
                         }
                     }]
                 },

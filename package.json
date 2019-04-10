@@ -1,8 +1,7 @@
 {
   "name": "stella-polaris-dashboard",
-  "version": "1.0.1",
-  "private": true,
-  "homepage": "",
+  "version": "1.2.0",
+  "main": "src/index.js",
   "dependencies": {
     "@react-pdf/renderer": "^1.4.2",
     "apexcharts": "^3.6.2",
