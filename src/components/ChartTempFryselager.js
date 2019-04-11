@@ -349,7 +349,7 @@ const series =
     }
 }
 
-const textar = 'Mark'
+const textar = 'Merke'
 
 class ChartTempFryselager extends React.Component {
     constructor(props) {

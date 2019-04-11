@@ -9,7 +9,7 @@ class KompressorTabell extends React.Component {
             <div className="card mb-4">
                 <div className="card-body">
                     <div className="card-header">
-                        <h5 className="card-title">Kjølekompressorer</h5>                      
+                        <h5 className="card-title">Frysekompressorer</h5>                      
                     </div>
 
                     <Table responsive hover className="m-0">

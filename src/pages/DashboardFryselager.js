@@ -9,16 +9,17 @@ import KompressorTabell from '../components/KompressorTabell';
 import ChartEnergiforbruk from '../components/ChartEnergiforbruk';
 import ChartTempFryselager from '../components/ChartTempFryselager';
 
+//API URL
 const k1_api_url = '/api/iottimeseries/v3/timeseries/2271ff4bcc0b48e88109909c158e0142/Kompressor1'
 const k2_api_url = '/api/iottimeseries/v3/timeseries/2271ff4bcc0b48e88109909c158e0142/Kompressor2'
 const k3_api_url = '/api/iottimeseries/v3/timeseries/2271ff4bcc0b48e88109909c158e0142/Kompressor3'
 const k4_api_url = '/api/iottimeseries/v3/timeseries/2271ff4bcc0b48e88109909c158e0142/Kompressor4'
-const hjemme_api_url = '/api/iottimeseries/v3/timeseries/d014986bc5cb497fa4bced744e1afaa3/EnviromentData?from=2019-03-22T00:00:00Z&to=2019-04-08T00:15:00Z'
+const hjemme_api_url = '/api/iottimeseries/v3/timeseries/d014986bc5cb497fa4bced744e1afaa3/EnviromentData'
+// const test_url = '/api/iottimeseries/v3/timeseries/d014986bc5cb497fa4bced744e1afaa3/EnviromentData?from=2019-03-22T00:00:00Z&to=2019-03-24T00:15:00Z'
 
-const dummy_api_url = 'https://api.github.com/users/andrrssjarken'
 
 class DashboardFryselager extends React.Component {
-    //API URL
+    
     state = {
         sideMenu: true,
         loading: false
@@ -27,42 +28,25 @@ class DashboardFryselager extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            k1_data: {},
-            k2_data: {},
-            k3_data: {},
-            k4_data: {},
-            hjemme_data: {},
-            dummyData: {},
+            k1Driftstid: '',
+            k1Forbruk: '',
+            k1Status: '',
+            k2Driftstid: '',
+            k2Forbruk: '',
+            k2Status: '',
+            k3Driftstid: '',
+            k3Forbruk: '',
+            k3Status: '',
+            k4Driftstid: '',
+            k4Forbruk: '',
+            k4Status: '',
+            hjemme_data: [],
             error: null,
         }
     }
 
-    getHeaderToken() {
-        var myXRSFToken;
-        var nameEQ = 'XSRF-TOKEN' + "=";
-        var ca = document.cookie.split(';');
-        for (var i = 0; i < ca.length; i++) {
-          var c = ca[i];
-          while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-          if (c.indexOf(nameEQ) === 0) myXRSFToken = c.substring(nameEQ.length, c.length);
-        }      
-        console.log("myXRSFToken = " + myXRSFToken);
-    }
 
-    fetchDummyAPI() {
-        fetch(dummy_api_url)
-            .then(response => {
-                if (response.ok) {
-                    return response.json()
-                } else {
-                    throw new Error('Error med fetching av dummy api...')
-                }
-            })                          
-            .then(ddata => this.setState({dummyData: ddata, loading: false}))
-            .catch(error => this.setState({ error, loading: false}))        
-    }
-
-    fetchKompressor1() {       
+    fetchKompressor1() {
         fetch(k1_api_url, {
         credentials: 'include',
         headers: {
@@ -70,21 +54,20 @@ class DashboardFryselager extends React.Component {
           "Accept": "application/json",
           "x-xsrf-token": this.myXRSFToken,
           "origin": `${window.location.protocol}//${window.location.host}`
-        }
+        }})
+        .then(res => res.json())
+        .then(data1 => {
+            this.setState({
+                k1Driftstid: data1[0].driftstid,
+                k1Forbruk: data1[0].forbruk,
+                k1Status: data1[0].status,
+                loading: false
+            })
         })
-        .then(response => {
-            if (response.ok) {
-                return response.json()
-            } else {
-                throw new Error('K1 Error med fetching av dummy api...')
-            }
-        })                          
-        .then(data => this.setState({k1_data: data, loading: false}))
-        .catch(error => this.setState({ error, loading: false}))    
-        console.log('Her er data K1: ' + this.state.k1_data)
+        .catch(error => console.log('Fetching failed', error))                      
     }
 
-    fetchKompressor2() {       
+    fetchKompressor2() {
         fetch(k2_api_url, {
         credentials: 'include',
         headers: {
@@ -92,21 +75,20 @@ class DashboardFryselager extends React.Component {
           "Accept": "application/json",
           "x-xsrf-token": this.myXRSFToken,
           "origin": `${window.location.protocol}//${window.location.host}`
-        }
+        }})
+        .then(res => res.json())
+        .then(data2 => {
+            this.setState({
+                k2Driftstid: data2[0].driftstid,
+                k2Forbruk: data2[0].forbruk,
+                k2Status: data2[0].status,
+                loading: false
+            })
         })
-        .then(response => {
-            if (response.ok) {
-                return response.json()
-            } else {
-                throw new Error('K2 Error med fetching av dummy api...')
-            }
-        })                          
-        .then(data => this.setState({k2_data: data, loading: false}))
-        .catch(error => this.setState({ error, loading: false}))    
-        console.log('Her er data K2: ' + this.state.k2_data)
+        .catch(error => console.log('Fetching failed', error))    
     }
 
-    fetchKompressor3() {       
+    fetchKompressor3() {
         fetch(k3_api_url, {
         credentials: 'include',
         headers: {
@@ -114,21 +96,20 @@ class DashboardFryselager extends React.Component {
           "Accept": "application/json",
           "x-xsrf-token": this.myXRSFToken,
           "origin": `${window.location.protocol}//${window.location.host}`
-        }
+        }})
+        .then(res => res.json())
+        .then(data3 => {
+            this.setState({
+                k3Driftstid: data3[0].driftstid,
+                k3Forbruk: data3[0].forbruk,
+                k3Status: data3[0].status,
+                loading: false
+            })
         })
-        .then(response => {
-            if (response.ok) {
-                return response.json()
-            } else {
-                throw new Error('K3 Error med fetching av dummy api...')
-            }
-        })                          
-        .then(data => this.setState({k3_data: data, loading: false}))
-        .catch(error => this.setState({ error, loading: false}))    
-        console.log('Her er data K3: ' + this.state.k3_data)
+        .catch(error => console.log('Fetching failed', error))    
     }
 
-    fetchKompressor4() {       
+    fetchKompressor4() {
         fetch(k4_api_url, {
         credentials: 'include',
         headers: {
@@ -136,21 +117,20 @@ class DashboardFryselager extends React.Component {
           "Accept": "application/json",
           "x-xsrf-token": this.myXRSFToken,
           "origin": `${window.location.protocol}//${window.location.host}`
-        }
+        }})
+        .then(res => res.json())
+        .then(data4 => {
+            this.setState({
+                k4Driftstid: data4[0].driftstid,
+                k4Forbruk: data4[0].forbruk,
+                k4Status: data4[0].status,
+                loading: false
+            })
         })
-        .then(response => {
-            if (response.ok) {
-                return response.json()
-            } else {
-                throw new Error('K4 Error med fetching api...')
-            }
-        })                          
-        .then(data => this.setState({k4_data: data, loading: false}))
-        .catch(error => this.setState({ error, loading: false}))    
-        console.log('Her er data K4: ' + this.state.k4_data)
+        .catch(error => console.log('Fetching failed', error))    
     }
 
-    fetchHjemmeApi() {       
+    fetchHjemmeApi() {  
         fetch(hjemme_api_url, {
         credentials: 'include',
         headers: {
@@ -158,31 +138,41 @@ class DashboardFryselager extends React.Component {
           "Accept": "application/json",
           "x-xsrf-token": this.myXRSFToken,
           "origin": `${window.location.protocol}//${window.location.host}`
-        }
+        }})
+        .then(res => res.json())
+        .then(data => {
+            this.setState({
+                hjemme_data: data,
+                loading: false
+            })
         })
-        .then(response => {
-            if (response.ok) {
-                return response.json()
-            } else {
-                throw new Error('HjemmeData Error med fetching api...')
-            }
-        })                          
-        .then(data => this.setState({hjemme_data: data, loading: false}))
-        .catch(error => this.setState({ error, loading: false}))    
-        console.log('Her er data fra Pi: ' + this.state.hjemme_data)
+        .catch(error => console.log('Fetching failed', error))   
     }
+
+    
 
     // Loading icon false after DOM loaded
     componentDidMount() {
         this.setState ({ loading: true})
+
         setTimeout(() => {
-            this.getHeaderToken()
+            
+            var myXRSFToken;
+            var nameEQ = 'XSRF-TOKEN' + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+              var c = ca[i];
+              while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+              if (c.indexOf(nameEQ) === 0) myXRSFToken = c.substring(nameEQ.length, c.length);
+            }      
+            console.log("myXRSFToken = " + myXRSFToken);
+                  
             this.fetchKompressor1()
             this.fetchKompressor2()
             this.fetchKompressor3()
             this.fetchKompressor4()
-            this.fetchHjemmeApi()
-            this.fetchDummyAPI()          
+            // this.fetchTest()  
+            // this.fetchHjemmeApi()       
         }, 3000);
         
         /*
@@ -202,12 +192,22 @@ class DashboardFryselager extends React.Component {
         this.setState({sideMenu: active});
     }
     
+    
     render() {
         let loader = null
         if (this.state.loading) {
             loader = <Loader message="Loading..." />
         }
-        
+
+        const {k1Driftstid, k1Forbruk, k1Status} = this.state;
+        const {k2Driftstid, k2Forbruk, k2Status} = this.state;
+        const {k3Driftstid, k3Forbruk, k3Status} = this.state;
+        const {k4Driftstid, k4Forbruk, k4Status} = this.state;
+
+        console.log(k1Driftstid)
+        console.log(k1Forbruk)
+        console.log(k1Status)
+
         return (
             <div className="page-wrapper">
                 {/* Navigation */}
@@ -245,10 +245,7 @@ class DashboardFryselager extends React.Component {
                     {/* ColdStorageChart */}
                     <div className="row">
                         <Col lg={12}>
-                            <h1>{this.state.dummyData.created_at}</h1>
-                            <h1>{this.state.dummyData.name}</h1>
-                            <h1>{this.state.k1_data.driftstid}</h1>
-                            <ChartTempFryselager created_at={this.state.dummyData.created_at}/>
+                            <ChartTempFryselager/>
                         </Col>
                     </div>
 
@@ -256,21 +253,21 @@ class DashboardFryselager extends React.Component {
                     <div className="row">
                         <Col lg={6}>
                             <KompressorTabell 
-                                k1_driftstid={this.state.k1_data.driftstid}
-                                k1_forbruk={this.state.k1_data.forbruk}
-                                k1_status={this.state.k1_data.status}
+                                k1_driftstid={k1Driftstid}
+                                k1_forbruk={k1Forbruk}
+                                k1_status={k1Status}
 
-                                k2_driftstid={this.state.k2_data.driftstid}
-                                k2_forbruk={this.state.k2_data.forbruk}
-                                k2_status={this.state.k2_data.status}
+                                k2_driftstid={k2Driftstid}
+                                k2_forbruk={k2Forbruk}
+                                k2_status={k2Status}
 
-                                k3_driftstid={this.state.k3_data.driftstid}
-                                k3_forbruk={this.state.k3_data.forbruk}
-                                k3_status={this.state.k3_data.status}
+                                k3_driftstid={k3Driftstid}
+                                k3_forbruk={k3Forbruk}
+                                k3_status={k3Status}
 
-                                k4_driftstid={this.state.k4_data.driftstid}
-                                k4_forbruk={this.state.k4_data.forbruk}
-                                k4_status={this.state.k4_data.status}
+                                k4_driftstid={k4Driftstid}
+                                k4_forbruk={k4Forbruk}
+                                k4_status={k4Status}
                             />
                         </Col>
 

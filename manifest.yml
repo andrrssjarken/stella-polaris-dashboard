@@ -1,6 +1,5 @@
 applications:
-- name: stell-apolaris-dashboard
+- name: stella-polaris
   stack: cflinuxfs3
-  instances: 1
   random-route: true
-  memory: 512MB
+  memory: 1600MB
