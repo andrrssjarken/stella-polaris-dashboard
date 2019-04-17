@@ -7,17 +7,77 @@ import Loader from '../components/Common/Loader';
 import { Link } from "react-router-dom";
 import ChartTempKokeprosess from '../components/ChartTempKokeprosess'
 
+const FROMDATE = '2019-04-05T00:12:00Z'
+const TODATE = '2019-04-08T00:16:00Z'
+const API_FETCH_URL = '/api/iottimeseries/v3/timeseries/2271ff4bcc0b48e88109909c158e0142/Temperatur_Fryser?from=' + FROMDATE + '&to=' + TODATE
+
 class DashboardKokeprosess extends React.Component {
+    
     state = {
         sideMenu: true,
-        loading: true
-    };
+        loading: false
+    }
+
+    constructor(props){
+        super(props)
+        this.state = {
+            TestData: []
+        }
+    }
+
+    FetchAPI(requestURL) {
+        fetch(requestURL, {
+            credentials: 'include',
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+              "x-xsrf-token": this.myXRSFToken,
+              "origin": `${window.location.protocol}//${window.location.host}`
+            }})
+          .then(response => {
+            let Responseheader = response.headers.get('Link')
+            console.log(Responseheader)
+            response.json()
+            .then(data => this.setState({
+                TestData: this.state.TestData.concat(data)
+            }))
+            if (Responseheader){
+                let nextPageUrl = Responseheader.match(/\bhttps?:\/\/\S+Z/gi)
+                console.log('Next Page URL: ', nextPageUrl)
+                setTimeout(() => {
+                    this.FetchAPI(nextPageUrl)
+                }, 10000);
+          } else {
+                console.log('Done fetching API')
+                this.setState({ 
+                    loading: false
+                })
+                return
+          }  
+        })
+        .catch(error => console.log('Fetching failed', error))
+      }
 
     // Loading icon false after DOM loaded
     componentDidMount() {
-        this.myInterval = setInterval(() => { 
-            this.setState({ loading: false });
-        }, 1000); 
+        this.setState ({ loading: true})
+
+        setTimeout(() => {
+            
+            var myXRSFToken;
+            var nameEQ = 'XSRF-TOKEN' + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+              var c = ca[i];
+              while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+              if (c.indexOf(nameEQ) === 0) myXRSFToken = c.substring(nameEQ.length, c.length);
+            }      
+            console.log("myXRSFToken = " + myXRSFToken);
+                  
+            this.FetchAPI(API_FETCH_URL)
+   
+        }, 5000);
+
     }
 
     componentWillUnmount(){
@@ -29,12 +89,17 @@ class DashboardKokeprosess extends React.Component {
         this.setState({sideMenu: active});
     }
     
+
+
     render() {
         let loader = null;
         if (this.state.loading) {
             loader = <Loader message="Loading..." />
         }
-        
+
+        const {TestData} = this.state
+        console.log('Fetched data: ', TestData)
+
         return (
             <div className="page-wrapper">
                 {/* Navigation */}
@@ -64,71 +129,6 @@ class DashboardKokeprosess extends React.Component {
                             <ChartTempKokeprosess />
                         </Col>
                     </div>
-
-                   {/* Basic Table */}
-                   <Row>
-                        <Col xl={12}>
-                            <div className="card mb-4">
-                                <div className="card-body">
-                                    <div className="card-header">
-                                        <h5 className="card-title">Basic Table</h5>
-                                    </div>
-                                    
-                                    <Table responsive hover className="m-0">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Date</th>
-                                                <th className="text-center">Pages / Visit</th>
-                                                <th className="text-center">New user</th>
-                                                <th className="text-center">Last week</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>02.01.2019</td>
-                                                <td className="text-center">5000</td>
-                                                <td className="text-center">1000</td>
-                                                <td className="text-center">4500</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>02.02.2019</td>
-                                                <td className="text-center">5400</td>
-                                                <td className="text-center">1400</td>
-                                                <td className="text-center">4700</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>02.03.2019</td>
-                                                <td className="text-center">5500</td>
-                                                <td className="text-center">1400</td>
-                                                <td className="text-center">7600</td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>02.04.2019</td>
-                                                <td className="text-center">7400</td>
-                                                <td className="text-center">4500</td>
-                                                <td className="text-center">8700</td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>02.05.2019</td>
-                                                <td className="text-center">7600</td>
-                                                <td className="text-center">2300</td>
-                                                <td className="text-center">5400</td>
-                                            </tr>
-                                        </tbody>
-                                    </Table>
-                                </div>
-                            </div>
-                        </Col>
-                    </Row>
-                    {/* End Basic Table */}
-
 
                     {/* Footer */}
                     <div className="flex-grow-1"></div>
