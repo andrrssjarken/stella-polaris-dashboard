@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import ChartTempKokeprosess from '../components/ChartTempKokeprosess'
 
 const FROMDATE = '2019-04-05T00:12:00Z'
-const TODATE = '2019-04-08T00:16:00Z'
+const TODATE = '2019-04-06T00:16:00Z'
 const API_FETCH_URL = '/api/iottimeseries/v3/timeseries/2271ff4bcc0b48e88109909c158e0142/Temperatur_Fryser?from=' + FROMDATE + '&to=' + TODATE
 
 class DashboardKokeprosess extends React.Component {
