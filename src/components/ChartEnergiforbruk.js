@@ -15,7 +15,9 @@ class ChartEnergiforbruk extends React.Component {
                     enabled: false
                 },
                 stroke: {
-                    curve: 'straight'
+                    curve: 'straight',
+                    lineCap: 'round',
+                    width: 2
                 },
                 title: {
                     text: '',

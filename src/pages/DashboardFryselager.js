@@ -4,8 +4,11 @@ import {Breadcrumb, Button, Col } from 'react-bootstrap'
 import Footer from '../components/Footer'
 import Loader from '../components/Common/Loader'
 import { Link } from "react-router-dom"
+import DateRangePicker from 'react-bootstrap-daterangepicker'
+import 'bootstrap-daterangepicker/daterangepicker.css'
 import moment from "moment"
 
+// Komponenter
 import KompressorTabell from '../components/KompressorTabell'
 import ChartEnergiforbruk from '../components/ChartEnergiforbruk'
 import ChartTempFryselager from '../components/ChartTempFryselager'
@@ -21,8 +24,6 @@ const TEST_KOMP_STATUS_DRIFT_API_URL = 'http://labs.anbmedia.no/json/API/Kompres
 const TEST_KOMP_STATUS_DRIFT_API_URL_SINGEL = 'http://labs.anbmedia.no/json/API/KompressorerStatusDrift_Singel.json'
 const TEST_TEMP_FRYSELAGER_API_URL = 'http://labs.anbmedia.no/json/API/TempFryser.json'
 
-// Forenklet api header
-
 
 class DashboardFryselager extends React.Component {
     
@@ -30,7 +31,7 @@ class DashboardFryselager extends React.Component {
         super(props)
     
         this.state = {
-          // Time Range Date Picker
+          // Initiering av datovelger
           startDate: moment().subtract(1, 'days'), endDate: moment(),
   
           // Static
@@ -43,9 +44,11 @@ class DashboardFryselager extends React.Component {
           k3Status: [], k3Forbruk: [], k3Driftstid: [],  
           k4Status: [], k4Forbruk: [], k4Driftstid: [],
 
-          // isFetched
+          // isFetched states
           fryseTempIsFetched: false, kWhIsFetched: false, staticIsFetched: false
         }
+
+        this.handleApply = this.handleApply.bind(this);
     }
 
     // Funksjon for å hente inn temperaturdata. Funksjonen tar hensyn til response limit.
@@ -132,6 +135,23 @@ class DashboardFryselager extends React.Component {
         .catch(error => console.log('Fetching static komp data failed', error))    
     }
 
+    // Funksjon for å handle datovelger
+    handleApply(event, picker){
+        this.setState({
+            startDate: picker.startDate,
+            endDate: picker.endDate
+        })
+        
+        // Parser dataen for å få rett format til MindSphere
+        let APISTARTDATO = moment(this.state.startDate._d).toISOString().slice(0,-5) + "Z"
+        let APISLUTTDATO = moment(this.state.endDate._d).toISOString().slice(0,-5) + "Z"
+    
+        console.log('Startdato: ', APISTARTDATO)
+        console.log('Sluttdato: ', APISLUTTDATO)
+    
+        this.fetchfunction(KOMP_KWH_API_URL + APISTARTDATO + '&to=' + APISLUTTDATO)
+    }
+
 
     // Første gang, og vil bare rendre en gang. Som å bli født.
     componentDidMount() {
@@ -199,13 +219,18 @@ class DashboardFryselager extends React.Component {
 
         // Deklarerer states for å slippe å bruke 'this.state' hele tiden.       
         const { startDate, endDate, kForbrukTimeStamp, loading,
-                k1Status, k1Forbruk, k1Driftstid, 
-                k2Status, k2Forbruk, k2Driftstid, 
-                k3Status, k3Forbruk, k3Driftstid, 
-                k4Status, k4Forbruk, k4Driftstid,
-                fryseTempIsFetched, kWhIsFetched, staticIsFetched, 
-                fryserTemp, fryserTimeStamp, fryserVarsel } = this.state 
-
+            k1Status, k1Forbruk, k1Driftstid, 
+            k2Status, k2Forbruk, k2Driftstid, 
+            k3Status, k3Forbruk, k3Driftstid, 
+            k4Status, k4Forbruk, k4Driftstid,
+            fryseTempIsFetched, kWhIsFetched, staticIsFetched, 
+            fryserTemp, fryserTimeStamp, fryserVarsel } = this.state 
+        
+        // Lokale endringer i datovelger
+        let locale = {
+            applyLabel: 'Velg dato',
+            cancelLabel: 'Avslutt',
+        }
         
         return (
             <div className="page-wrapper">
@@ -232,9 +257,25 @@ class DashboardFryselager extends React.Component {
                         </div>
                         </Col>
                         <Col lg={2}>
-                        <div className="generate-report-placer">
-                            <Button variant="outline-primary" className="generate-report-btn">Lag rapport</Button>
-                        </div>
+                            <DateRangePicker
+                                timePicker={true}
+                                timePicker24Hour={true}
+                                locale={locale}
+                                minDate="04/10/2019"
+                                opens="left"
+                                startDate={this.state.startDate}
+                                endDate={this.state.endDate}
+                                onApply={this.handleApply}
+                            >
+                            <div className="input-group">
+                                <input type="text" className="form-control" value={'Velg dato'}/>
+                                <span className="input-group-btn">
+                                    <Button className="default date-range-toggle">
+                                        <i className="fa fa-calendar"/>
+                                    </Button>
+                                </span>
+                                </div>
+                            </DateRangePicker>
                         </Col>
                     </div>                               
                     {/* Slutt Breadcrumb */}
