@@ -29,6 +29,10 @@ class Navigation extends React.Component {
         this.props.onClick(this.state.sideMenu);
     }
 
+    print(){
+        window.print();
+    }
+
     render() {
         return (
             <div className="page-wrapper">
@@ -54,7 +58,7 @@ class Navigation extends React.Component {
                         {/* Sett inn klokke her*/}
                         <LiveClock/>
                         <div className="generate-report-placer">
-                            <Button variant="outline-primary" className="generate-report-btn">Generer rapport</Button>
+                            <Button variant="primary" className="generate-report-btn" onClick={this.print}>Generer rapport</Button>
                         </div>
                     </Nav>
                     
