@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
 
 class KompressorTabell extends React.Component {
 
@@ -9,7 +9,8 @@ class KompressorTabell extends React.Component {
             <div className="card mb-4">
                 <div className="card-body">
                     <div className="card-header">
-                        <h5 className="card-title">Frysekompressorer - Sanntidsdata</h5>                      
+                        <Button variant="outline-primary btn-sm" className="float-right refresh-button">Oppdater data</Button> 
+                        <h5 className="card-title">Frysekompressorer - Sanntidsdata</h5>       
                     </div>
 
                     <Table responsive hover className="m-0">
