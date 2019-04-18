@@ -1,11 +1,12 @@
 import React from 'react'
 import Navigation from '../components/Navigation/Navigation'
-import {Breadcrumb, Button, Col } from 'react-bootstrap'
+import {Breadcrumb, Button, Col, Alert } from 'react-bootstrap'
 import Footer from '../components/Footer'
 import Loader from '../components/Common/Loader'
 import { Link } from "react-router-dom"
-import DateRangePicker from 'react-bootstrap-daterangepicker'
+import Datovelger from 'react-bootstrap-daterangepicker'
 import 'bootstrap-daterangepicker/daterangepicker.css'
+import * as Icon from 'react-feather';
 import moment from "moment"
 
 // Komponenter
@@ -145,13 +146,25 @@ class DashboardFryselager extends React.Component {
         // Parser dataen for å få rett format til MindSphere
         let APISTARTDATO = moment(this.state.startDate._d).toISOString().slice(0,-5) + "Z"
         let APISLUTTDATO = moment(this.state.endDate._d).toISOString().slice(0,-5) + "Z"
-    
+
         console.log('Startdato: ', APISTARTDATO)
         console.log('Sluttdato: ', APISLUTTDATO)
-    
-        this.fetchfunction(KOMP_KWH_API_URL + APISTARTDATO + '&to=' + APISLUTTDATO)
-    }
 
+        // Sett loader på
+        this.setState({
+            loading: true
+        })
+    
+        // Starter ny fething her
+        setTimeout(() => {
+            this.FetchKompkWh(TEST_KOMP_KWH_API_URL + APISTARTDATO + '&to=' + APISLUTTDATO)
+        }, 500);
+
+        setTimeout(() => {
+            this.FetchFryseTemp(TEST_TEMP_FRYSELAGER_API_URL + APISTARTDATO + '&to=' + APISLUTTDATO)
+        }, 500);
+
+    }
 
     // Første gang, og vil bare rendre en gang. Som å bli født.
     componentDidMount() {
@@ -212,10 +225,19 @@ class DashboardFryselager extends React.Component {
     }
     
     render() {
+        // Loadingspinner
         let loader = null;
         if (this.state.loading) {
             loader = <Loader message="Loading..." />
         }
+
+        // Label på datovelger
+        let start = this.state.startDate.format('DD.MM.YYYY');
+        let end = this.state.endDate.format('DD.MM.YYYY');
+        let label = start + ' - ' + end;
+        if (start === end) {
+          label = start;
+        } 
 
         // Deklarerer states for å slippe å bruke 'this.state' hele tiden.       
         const { startDate, endDate, kForbrukTimeStamp, loading,
@@ -229,7 +251,7 @@ class DashboardFryselager extends React.Component {
         // Lokale endringer i datovelger
         let locale = {
             applyLabel: 'Velg dato',
-            cancelLabel: 'Avslutt',
+            cancelLabel: 'Lukk',
         }
         
         return (
@@ -245,7 +267,7 @@ class DashboardFryselager extends React.Component {
 
                     {/* Start Breadcrumb and datepicker*/}
                     <div className="row">
-                        <Col lg={10}>
+                        <Col lg={9}>
                         <div className="main-content-header">               
                             <Breadcrumb>
                                 <h1>Dashboard</h1>
@@ -256,8 +278,8 @@ class DashboardFryselager extends React.Component {
                             </Breadcrumb>                          
                         </div>
                         </Col>
-                        <Col lg={2}>
-                            <DateRangePicker
+                        <Col lg={3}>
+                            <Datovelger
                                 timePicker={true}
                                 timePicker24Hour={true}
                                 locale={locale}
@@ -266,22 +288,22 @@ class DashboardFryselager extends React.Component {
                                 startDate={this.state.startDate}
                                 endDate={this.state.endDate}
                                 onApply={this.handleApply}
-                            >
-                            <div className="input-group">
-                                <input type="text" className="form-control" value={'Velg dato'}/>
-                                <span className="input-group-btn">
-                                    <Button className="default date-range-toggle">
-                                        <i className="fa fa-calendar"/>
-                                    </Button>
-                                </span>
-                                </div>
-                            </DateRangePicker>
+                                >
+                                <div className="input-group">
+                                    <input type="text" className="form-control" value={label}/>
+                                    <span className="input-group-btn">
+                                        <Button className="date-toggle-iconbutton">
+                                            <Icon.Calendar className="date-toggle-icon"/>
+                                        </Button>
+                                    </span>
+                                </div>                                
+                            </Datovelger>
                         </Col>
                     </div>                               
                     {/* Slutt Breadcrumb */}
                     
                     {/* ColdStorageChart */}
-                    { fryseTempIsFetched && staticIsFetched && kWhIsFetched ? 
+                    { fryseTempIsFetched && staticIsFetched && kWhIsFetched && !loading ? 
                     <div className="loading-content">
                         <div className="row">
                             <Col lg={12}>
@@ -327,7 +349,9 @@ class DashboardFryselager extends React.Component {
                                     />
                             </Col>
                         </div>
-                    </div> : <p>Laster inn data...</p>}
+                    </div> : <Alert variant="info">
+                                    Laster inn data fra MindSphere. Vennligst vent.
+                            </Alert>}
                     {/* Footer */}
                     <div className="flex-grow-1"></div>
                     <Footer /> 

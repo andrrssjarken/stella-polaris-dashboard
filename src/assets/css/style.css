@@ -40,7 +40,6 @@ Table Of Content
 @media print {
   .col-lg-6 {
     flex: 0 0 100%;
-    max-width: 100%;
     width: 100%;
 }
   #_mdspbar {
@@ -56,6 +55,33 @@ Table Of Content
     margin-left: -230px;
   }
 }
+
+/* Datovelger */
+.daterangepicker .drp-buttons .btn {
+  padding: 10px 15px;
+}
+.date-toggle-iconbutton {
+  height: 35px !important;
+}
+
+.date-toggle-icon{
+  height: 15px !important;
+  width: 15px !important;
+}
+
+.react-bootstrap-daterangepicker-container{
+  height: 5px;
+}
+
+.form-control{
+  height: 35px !important;
+}
+
+.daterangepicker .drp-selected {
+  display: none;
+}
+
+
 
 body {
   background-color: #f3f6f9;

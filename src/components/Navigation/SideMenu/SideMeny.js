@@ -25,11 +25,11 @@ class SideMenuDark extends React.Component {
                                 <span className="title">Fryselager</span>
                             </NavLink>
 
-                            <NavLink to="/dashboard-kokeprosess/" className="nav-link">
+                            <NavLink to="/dashboard-kontor/" className="nav-link">
                                 <Icon.BarChart2 
                                     className="icon"
                                 /> 
-                                <span className="title">Kokeprosess</span>
+                                <span className="title">Kontor</span>
                             </NavLink>
                          
                             <NavLink to="/alarmer/" className="nav-link">

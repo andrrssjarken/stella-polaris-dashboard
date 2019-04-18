@@ -7,13 +7,9 @@
   "dependencies": {
     "apexcharts": "^3.6.2",
     "bootstrap": "^4.2.1",
-    "echarts": "^4.2.0-rc.2",
-    "echarts-for-react": "^2.0.15-beta.0",
-    "faker": "^4.1.0",
-    "google-map-react": "^1.1.2",
-    "history": "^4.7.2",
-    "node-sass": "^4.11.0",
+    "bootstrap-daterangepicker": "^3.0.4",
     "moment": "^2.24.0",
+    "node-sass": "^4.11.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.4",
     "react-accessible-accordion": "^2.4.5",
@@ -28,7 +24,8 @@
     "react-live-clock": "^3.1.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^2.1.8",
-    "webpack": "4.28.3"
+    "webpack": "4.28.3",
+    "yarn": "^1.15.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -39,7 +36,6 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-
   "browserslist": [
     ">0.2%",
     "not dead",
