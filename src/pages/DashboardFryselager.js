@@ -1,162 +1,154 @@
-import React from 'react';
-import Navigation from '../components/Navigation/Navigation';
-import {Breadcrumb, Button, Col } from 'react-bootstrap';
-import Footer from '../components/Footer';
-import Loader from '../components/Common/Loader';
+import React from 'react'
+import Navigation from '../components/Navigation/Navigation'
+import {Breadcrumb, Button, Col } from 'react-bootstrap'
+import Footer from '../components/Footer'
+import Loader from '../components/Common/Loader'
+import { Link } from "react-router-dom"
+import moment from "moment"
 
-import { Link } from "react-router-dom";
-import KompressorTabell from '../components/KompressorTabell';
-import ChartEnergiforbruk from '../components/ChartEnergiforbruk';
-import ChartTempFryselager from '../components/ChartTempFryselager';
+import KompressorTabell from '../components/KompressorTabell'
+import ChartEnergiforbruk from '../components/ChartEnergiforbruk'
+import ChartTempFryselager from '../components/ChartTempFryselager'
 
 //API URL
-const k1_api_url = '/api/iottimeseries/v3/timeseries/2271ff4bcc0b48e88109909c158e0142/Kompressor1'
-const k2_api_url = '/api/iottimeseries/v3/timeseries/2271ff4bcc0b48e88109909c158e0142/Kompressor2'
-const k3_api_url = '/api/iottimeseries/v3/timeseries/2271ff4bcc0b48e88109909c158e0142/Kompressor3'
-const k4_api_url = '/api/iottimeseries/v3/timeseries/2271ff4bcc0b48e88109909c158e0142/Kompressor4'
-const hjemme_api_url = '/api/iottimeseries/v3/timeseries/d014986bc5cb497fa4bced744e1afaa3/EnviromentData'
-// const test_url = '/api/iottimeseries/v3/timeseries/d014986bc5cb497fa4bced744e1afaa3/EnviromentData?from=2019-03-22T00:00:00Z&to=2019-03-24T00:15:00Z'
+const KOMP_KWH_API_URL = '/api/iottimeseries/v3/timeseries/38529181d87e4358b4b8ebe8d3479d00/KompressorerDynamiskForbruk' // ?from={FROMDATO}&to={TODATO}
+const KOMP_STATUS_DRIFT_API_URL = '/api/iottimeseries/v3/timeseries/c3bb1834c010489598967ca63e6a09fc/KompressorerStatusDriftstid'
+const TEMP_FRYSELAGER_API_URL = '/api/iottimeseries/v3/timeseries/2271ff4bcc0b48e88109909c158e0142/Temperatur_Fryser' // ?from={FROMDATO}&to={TODATO}
+
+// Test API URL
+const TEST_KOMP_KWH_API_URL = 'http://labs.anbmedia.no/json/API/KompressorerkWh.json'
+const TEST_KOMP_STATUS_DRIFT_API_URL = 'http://labs.anbmedia.no/json/API/KompressorerStatusDrift.json'
+const TEST_KOMP_STATUS_DRIFT_API_URL_SINGEL = 'http://labs.anbmedia.no/json/API/KompressorerStatusDrift_Singel.json'
+const TEST_TEMP_FRYSELAGER_API_URL = 'http://labs.anbmedia.no/json/API/TempFryser.json'
+
+// Forenklet api header
 
 
 class DashboardFryselager extends React.Component {
     
-    state = {
-        sideMenu: true,
-        loading: false
-    }
-
-    constructor(props) {
+    constructor(props){
         super(props)
+    
         this.state = {
-            k1Driftstid: '',
-            k1Forbruk: '',
-            k1Status: '',
-            k2Driftstid: '',
-            k2Forbruk: '',
-            k2Status: '',
-            k3Driftstid: '',
-            k3Forbruk: '',
-            k3Status: '',
-            k4Driftstid: '',
-            k4Forbruk: '',
-            k4Status: '',
-            hjemme_data: [],
-            error: null,
+          // Time Range Date Picker
+          startDate: moment().subtract(1, 'days'), endDate: moment(),
+  
+          // Static
+          loading: true, sideMenu: true, error: null,
+  
+          // API States
+          fryserTemp: [], fryserTimeStamp: [], fryserVarsel: [],
+          k1Status: [], k1Forbruk: [], kForbrukTimeStamp: [], k1Driftstid: [],
+          k2Status: [], k2Forbruk: [], k2Driftstid: [], 
+          k3Status: [], k3Forbruk: [], k3Driftstid: [],  
+          k4Status: [], k4Forbruk: [], k4Driftstid: [],
+
+          // isFetched
+          fryseTempIsFetched: false, kWhIsFetched: false, staticIsFetched: false
         }
     }
 
-
-    fetchKompressor1() {
-        fetch(k1_api_url, {
-        credentials: 'include',
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-          "x-xsrf-token": this.myXRSFToken,
-          "origin": `${window.location.protocol}//${window.location.host}`
-        }})
-        .then(res => res.json())
-        .then(data1 => {
-            this.setState({
-                k1Driftstid: data1[0].driftstid,
-                k1Forbruk: data1[0].forbruk,
-                k1Status: data1[0].status,
-                loading: false
-            })
+    // Funksjon for å hente inn temperaturdata. Funksjonen tar hensyn til response limit.
+    FetchFryseTemp(requestURL) {
+        fetch(requestURL/*, this.HeaderCredentials*/)
+        .then(response => {
+            let Responseheader = response.headers.get('Link')
+            console.log('Linkheader :', Responseheader)
+            response.json()
+            .then(data => this.setState({
+                fryserTemp: this.state.fryserTemp.concat(data.map((temp) => temp.Temperatur)),
+                fryserTimeStamp: this.state.fryserTimeStamp.concat(data.map((time) => time._time))
+            }))
+            if (Responseheader){
+                let nextPageUrl = Responseheader.match(/\bhttps?:\/\/\S+Z/gi)
+                console.log('Next Page URL: ', nextPageUrl)
+                setTimeout(() => {
+                    this.FetchAPI(nextPageUrl)
+                }, 10000);
+        } else {
+                console.log('Done fetching FryseTemp API')
+                setTimeout(() => {
+                this.setState({ 
+                    fryseTempIsFetched: true
+                })
+                }, 1000)
+                return
+        }  
         })
-        .catch(error => console.log('Fetching failed', error))                      
+        .catch(error => console.log('Fetching failed', error))
     }
 
-    fetchKompressor2() {
-        fetch(k2_api_url, {
-        credentials: 'include',
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-          "x-xsrf-token": this.myXRSFToken,
-          "origin": `${window.location.protocol}//${window.location.host}`
-        }})
-        .then(res => res.json())
-        .then(data2 => {
-            this.setState({
-                k2Driftstid: data2[0].driftstid,
-                k2Forbruk: data2[0].forbruk,
-                k2Status: data2[0].status,
-                loading: false
-            })
+    // Funksjon for å hente inn kWh fra kompressorer. Funksjonen tar hensyn til response limit.
+    FetchKompkWh(requestURL) {
+        fetch(requestURL/*, this.HeaderCredentials*/)
+        .then(response => {
+            let Responseheader = response.headers.get('Link')
+            console.log('Linkheader :', Responseheader)
+            response.json()
+            .then(data => this.setState({
+                k1Forbruk: this.state.k1Forbruk.concat(data.map((kWh) => kWh.K1_D_kWh)),
+                k2Forbruk: this.state.k2Forbruk.concat(data.map((kWh) => kWh.K2_D_kWh)),
+                k3Forbruk: this.state.k3Forbruk.concat(data.map((kWh) => kWh.K3_D_kWh)),
+                k4Forbruk: this.state.k4Forbruk.concat(data.map((kWh) => kWh.K4_D_kWh)),
+                kForbrukTimeStamp: this.state.kForbrukTimeStamp.concat(data.map((tid) => tid._time))
+            }))
+            if (Responseheader){
+                let nextPageUrl = Responseheader.match(/\bhttps?:\/\/\S+Z/gi)
+                console.log('Next Page URL: ', nextPageUrl)
+                setTimeout(() => {
+                    this.FetchAPI(nextPageUrl)
+                }, 2000);
+        } else {
+                console.log('Done fetching Kompressor kWh API')
+                setTimeout(() => {
+                this.setState({ 
+                    kWhIsFetched: true
+                })}, 1000)
+                return
+        }  
         })
-        .catch(error => console.log('Fetching failed', error))    
+        .catch(error => console.log('Fetching failed', error))
     }
 
-    fetchKompressor3() {
-        fetch(k3_api_url, {
-        credentials: 'include',
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-          "x-xsrf-token": this.myXRSFToken,
-          "origin": `${window.location.protocol}//${window.location.host}`
-        }})
-        .then(res => res.json())
-        .then(data3 => {
-            this.setState({
-                k3Driftstid: data3[0].driftstid,
-                k3Forbruk: data3[0].forbruk,
-                k3Status: data3[0].status,
-                loading: false
+    // Henter inn siste statiske data for kompressorer. Status og drifttid.
+    FetchStaticKompData(requestURL) {
+        fetch(requestURL/*, this.HeaderCredentials*/)
+            .then(res => res.json())
+            .then(data => {
+                this.setState({
+                    k1Status: data[0].K1_Status,
+                    k1Driftstid: data[0].K1_Driftstid,
+                    k2Status: data[0].K2_Status,
+                    k2Driftstid: data[0].K2_Driftstid,
+                    k3Status: data[0].K3_Status,
+                    k3Driftstid: data[0].K3_Driftstid,
+                    k4Status: data[0].K4_Status,
+                    k4Driftstid: data[0].K4_Driftstid,
+                    staticIsFetched: true
+
             })
+            console.log('Done fetching static komp API')
         })
-        .catch(error => console.log('Fetching failed', error))    
+        .catch(error => console.log('Fetching static komp data failed', error))    
     }
 
-    fetchKompressor4() {
-        fetch(k4_api_url, {
-        credentials: 'include',
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-          "x-xsrf-token": this.myXRSFToken,
-          "origin": `${window.location.protocol}//${window.location.host}`
-        }})
-        .then(res => res.json())
-        .then(data4 => {
-            this.setState({
-                k4Driftstid: data4[0].driftstid,
-                k4Forbruk: data4[0].forbruk,
-                k4Status: data4[0].status,
-                loading: false
-            })
-        })
-        .catch(error => console.log('Fetching failed', error))    
-    }
 
-    fetchHjemmeApi() {  
-        fetch(hjemme_api_url, {
-        credentials: 'include',
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-          "x-xsrf-token": this.myXRSFToken,
-          "origin": `${window.location.protocol}//${window.location.host}`
-        }})
-        .then(res => res.json())
-        .then(data => {
-            this.setState({
-                hjemme_data: data,
-                loading: false
-            })
-        })
-        .catch(error => console.log('Fetching failed', error))   
-    }
-
-    
-
-    // Loading icon false after DOM loaded
+    // Første gang, og vil bare rendre en gang. Som å bli født.
     componentDidMount() {
-        this.setState ({ loading: true})
-
-        setTimeout(() => {
-            
+        
+        // Forenkler header kredentials i API spørringene
+        let HeaderCredentials = {
+            credentials: 'include',
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+              "x-xsrf-token": this.myXRSFToken,
+              "origin": `${window.location.protocol}//${window.location.host}`
+            }
+        }
+        
+        // Get XRSF token for å ta inn API
+        setTimeout(() => {    
             var myXRSFToken;
             var nameEQ = 'XSRF-TOKEN' + "=";
             var ca = document.cookie.split(';');
@@ -165,22 +157,29 @@ class DashboardFryselager extends React.Component {
               while (c.charAt(0) === ' ') c = c.substring(1, c.length);
               if (c.indexOf(nameEQ) === 0) myXRSFToken = c.substring(nameEQ.length, c.length);
             }      
-            console.log("myXRSFToken = " + myXRSFToken);
+            console.log("myXRSFToken: " + myXRSFToken);
                   
-            this.fetchKompressor1()
-            this.fetchKompressor2()
-            this.fetchKompressor3()
-            this.fetchKompressor4()
-            // this.fetchTest()  
-            // this.fetchHjemmeApi()       
-        }, 3000);
-        
-        /*
+        }, 1000);
+
+        // Fetch Sanntidsdata
+        setTimeout(() => {
+            this.FetchStaticKompData(TEST_KOMP_STATUS_DRIFT_API_URL_SINGEL)
+        }, 2000);
+
+
+        setTimeout(() => {
+            this.FetchKompkWh(TEST_KOMP_KWH_API_URL)
+        }, 2000);
+
+        setTimeout(() => {
+            this.FetchFryseTemp(TEST_TEMP_FRYSELAGER_API_URL)
+        }, 2000);
+
+
         this.myInterval = setInterval(() => { 
             this.setState({ loading: false });
-        }, 1000);
-        */
-        
+        }, 3500);
+
     }
 
     componentWillUnmount(){
@@ -192,22 +191,22 @@ class DashboardFryselager extends React.Component {
         this.setState({sideMenu: active});
     }
     
-    
     render() {
-        let loader = null
+        let loader = null;
         if (this.state.loading) {
             loader = <Loader message="Loading..." />
         }
 
-        const {k1Driftstid, k1Forbruk, k1Status} = this.state;
-        const {k2Driftstid, k2Forbruk, k2Status} = this.state;
-        const {k3Driftstid, k3Forbruk, k3Status} = this.state;
-        const {k4Driftstid, k4Forbruk, k4Status} = this.state;
+        // Deklarerer states for å slippe å bruke 'this.state' hele tiden.       
+        const { startDate, endDate, kForbrukTimeStamp, loading,
+                k1Status, k1Forbruk, k1Driftstid, 
+                k2Status, k2Forbruk, k2Driftstid, 
+                k3Status, k3Forbruk, k3Driftstid, 
+                k4Status, k4Forbruk, k4Driftstid,
+                fryseTempIsFetched, kWhIsFetched, staticIsFetched, 
+                fryserTemp, fryserTimeStamp, fryserVarsel } = this.state 
 
-        console.log(k1Driftstid)
-        console.log(k1Forbruk)
-        console.log(k1Status)
-
+        
         return (
             <div className="page-wrapper">
                 {/* Navigation */}
@@ -220,7 +219,6 @@ class DashboardFryselager extends React.Component {
                     {/* End Loader */}
 
                     {/* Breadcrumb and generate report*/}
-
                     <div className="row">
                         <Col lg={10}>
                         <div className="main-content-header">               
@@ -241,41 +239,53 @@ class DashboardFryselager extends React.Component {
                     </div>
                                  
                     {/* End Breadcrumb */}
-
+                    
                     {/* ColdStorageChart */}
-                    <div className="row">
-                        <Col lg={12}>
-                            <ChartTempFryselager/>
-                        </Col>
-                    </div>
+                    { fryseTempIsFetched && staticIsFetched && kWhIsFetched ? 
+                    <div className="loading-content">
+                        <div className="row">
+                            <Col lg={12}>
+                                <ChartTempFryselager
+                                    tempIn={fryserTemp}
+                                    timeStampIn={fryserTimeStamp}
+                                    alarmsIn={fryserVarsel}
+                                />
+                            </Col>
+                        </div>
 
-                    {/* CompressorTable and EnergyConsumption */}
-                    <div className="row">
-                        <Col lg={6}>
-                            <KompressorTabell 
-                                k1_driftstid={k1Driftstid}
-                                k1_forbruk={k1Forbruk}
-                                k1_status={k1Status}
+                        {/* CompressorTable and EnergyConsumption */}
+                        <div className="row">
+                            <Col lg={6}>
+                                <KompressorTabell 
+                                    k1_driftstid={k1Driftstid}
+                                    k1_forbruk={k1Forbruk[k1Forbruk.length-1]}
+                                    k1_status={k1Status}
 
-                                k2_driftstid={k2Driftstid}
-                                k2_forbruk={k2Forbruk}
-                                k2_status={k2Status}
+                                    k2_driftstid={k2Driftstid}
+                                    k2_forbruk={k2Forbruk[k3Forbruk.length-1]}
+                                    k2_status={k2Status}
 
-                                k3_driftstid={k3Driftstid}
-                                k3_forbruk={k3Forbruk}
-                                k3_status={k3Status}
+                                    k3_driftstid={k3Driftstid}
+                                    k3_forbruk={k3Forbruk[k3Forbruk.length-1]}
+                                    k3_status={k3Status}
 
-                                k4_driftstid={k4Driftstid}
-                                k4_forbruk={k4Forbruk}
-                                k4_status={k4Status}
-                            />
-                        </Col>
+                                    k4_driftstid={k4Driftstid}
+                                    k4_forbruk={k4Forbruk[k4Forbruk.length-1]}
+                                    k4_status={k4Status}
+                                />
+                            </Col>
 
-                        <Col lg={6}>
-                            <ChartEnergiforbruk />
-                        </Col>
-                    </div>
-
+                            <Col lg={6}>
+                                    <ChartEnergiforbruk
+                                        k1kWhIn={k1Forbruk}
+                                        k2kWhIn={k2Forbruk}
+                                        k3kWhIn={k3Forbruk}
+                                        k4kWhIn={k4Forbruk}
+                                        timeStampIn={kForbrukTimeStamp}
+                                    />
+                            </Col>
+                        </div>
+                    </div> : <p>Laster inn data...</p>}
                     {/* Footer */}
                     <div className="flex-grow-1"></div>
                     <Footer /> 

@@ -9,7 +9,7 @@ class KompressorTabell extends React.Component {
             <div className="card mb-4">
                 <div className="card-body">
                     <div className="card-header">
-                        <h5 className="card-title">Frysekompressorer</h5>                      
+                        <h5 className="card-title">Frysekompressorer - Sanntidsdata</h5>                      
                     </div>
 
                     <Table responsive hover className="m-0">
@@ -24,7 +24,7 @@ class KompressorTabell extends React.Component {
 
                         <tbody>
 
-                            {/* Compressor 1 */}
+                            {/* Kompressor 1 */}
                             <tr>                            
                                 <td className="text-center">
                                     {this.props.k1_status === true && <span className="badge badge-success">Aktiv</span>}
@@ -35,7 +35,7 @@ class KompressorTabell extends React.Component {
                                 <td className="text-center">{this.props.k1_forbruk} kWh</td>
                             </tr>
 
-                            {/* Compressor 2 */}
+                            {/* Kompressor 2 */}
                             <tr>
                                 <td className="text-center">
                                     {this.props.k2_status === true && <span className="badge badge-success">Aktiv</span>}
@@ -46,7 +46,7 @@ class KompressorTabell extends React.Component {
                                 <td className="text-center">{this.props.k2_forbruk} kWh</td>
                             </tr>
 
-                            {/* Compressor 3 */}
+                            {/* Kompressor 3 */}
                             <tr>
                                 <td className="text-center">
                                     {this.props.k3_status === true && <span className="badge badge-success">Aktiv</span>}
@@ -56,7 +56,7 @@ class KompressorTabell extends React.Component {
                                 <td className="text-center">{this.props.k3_driftstid} timer</td>
                                 <td className="text-center">{this.props.k3_forbruk} kWh</td>
                             </tr>
-                            {/* Compressor 4 */}
+                            {/* Kompressor 4 */}
                             <tr>
                                 <td className="text-center">
                                     {this.props.k4_status === true && <span className="badge badge-success">Aktiv</span>}

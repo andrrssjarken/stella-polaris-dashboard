@@ -9,16 +9,19 @@ import ChartTempFryselager from '../components/ChartTempFryselager';
 import ChartTempKokeprosess from '../components/ChartTempKokeprosess';
 
 class Dashboard extends React.Component {
-    state = {
-        sideMenu: true,
-        loading: true
-    };
+    constructor(props){
+        super(props)
+    
+        this.state = {
+          loading: true, sideMenu: true
+        }
+    }
 
     // Loading icon false after DOM loaded
     componentDidMount() {
         this.myInterval = setInterval(() => { 
             this.setState({ loading: false });
-        }, 1000); 
+        }, 5000); 
     }
 
     componentWillUnmount(){
