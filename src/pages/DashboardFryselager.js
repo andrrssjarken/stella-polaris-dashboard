@@ -214,11 +214,11 @@ class DashboardFryselager extends React.Component {
                 {/* End Navigation */}
                 
                 <div className={`main-content d-flex flex-column ${this.state.sideMenu ? '' : 'hide-sidemenu'}`}>
-                    {/* Loader */}
+                    {/* Loading */}
                     {loader}
-                    {/* End Loader */}
+                    {/* Slutt Loader */}
 
-                    {/* Breadcrumb and generate report*/}
+                    {/* Start Breadcrumb and datepicker*/}
                     <div className="row">
                         <Col lg={10}>
                         <div className="main-content-header">               
@@ -233,12 +233,11 @@ class DashboardFryselager extends React.Component {
                         </Col>
                         <Col lg={2}>
                         <div className="generate-report-placer">
-                            <Button variant="outline-primary" className="generate-report-btn">{}Generer rapport</Button>
+                            <Button variant="outline-primary" className="generate-report-btn">Lag rapport</Button>
                         </div>
                         </Col>
-                    </div>
-                                 
-                    {/* End Breadcrumb */}
+                    </div>                               
+                    {/* Slutt Breadcrumb */}
                     
                     {/* ColdStorageChart */}
                     { fryseTempIsFetched && staticIsFetched && kWhIsFetched ? 

@@ -4,7 +4,8 @@ import './Navigation.css';
 import {
     Navbar, 
     Nav, 
-    Image
+    Image,
+    Button
 } from 'react-bootstrap';
 
 // Default dark side menu
@@ -52,6 +53,9 @@ class Navigation extends React.Component {
                     <Nav className="ml-auto right-nav navbar-nav">
                         {/* Sett inn klokke her*/}
                         <LiveClock/>
+                        <div className="generate-report-placer">
+                            <Button variant="outline-primary" className="generate-report-btn">Generer rapport</Button>
+                        </div>
                     </Nav>
                     
                 </Navbar>    

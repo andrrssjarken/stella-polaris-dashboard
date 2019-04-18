@@ -31,8 +31,10 @@ Table Of Content
 /* Default color & font Variables */
 /* End default color & font Variables */
 /* Default style */
+
 /* Stella Polaris blå: #00294f */
 /* Stella POlaris rød: #d51317 */
+/* Edits */
 
 body {
   background-color: #f3f6f9;
@@ -43,7 +45,7 @@ body {
 .live-clock {
   color: #00294f;
   font-size: 20px;
-  margin-top: 3px;
+  margin-top: 1px;
   margin-right: 20px;
   font-weight: 500;
 }
@@ -68,14 +70,12 @@ body {
   border-color: #00294f;
 }
 
-/* Edits */
-
 .generate-report-placer{
   float: right;
 }
 
 .generate-report-btn{
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 a {
   transition: .4s;
