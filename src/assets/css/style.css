@@ -36,6 +36,27 @@ Table Of Content
 /* Stella POlaris rød: #d51317 */
 /* Edits */
 
+/* Print CSS */
+@media print {
+  .col-lg-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    width: 100%;
+}
+  #_mdspbar {
+    display: none;
+  }
+  .main-content-header {
+    display: none;
+  }
+
+  @page {
+    size: landscape;
+    margin-top: 0px;
+    margin-left: -230px;
+  }
+}
+
 body {
   background-color: #f3f6f9;
   color: #47404f;

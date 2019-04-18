@@ -244,11 +244,13 @@ class DashboardFryselager extends React.Component {
                     <div className="loading-content">
                         <div className="row">
                             <Col lg={12}>
+                                <div className="TempChart">
                                 <ChartTempFryselager
                                     tempIn={fryserTemp}
                                     timeStampIn={fryserTimeStamp}
                                     alarmsIn={fryserVarsel}
                                 />
+                                </div>
                             </Col>
                         </div>
 
