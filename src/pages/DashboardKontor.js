@@ -1,6 +1,6 @@
 import React from 'react';
 import Navigation from '../components/Navigation/Navigation';
-import {Breadcrumb, Col, Button} from 'react-bootstrap';
+import {Breadcrumb, Col, Button, Alert} from 'react-bootstrap';
 import Footer from '../components/Footer';
 import Loader from '../components/Common/Loader';
 import Datovelger from 'react-bootstrap-daterangepicker'
@@ -11,9 +11,8 @@ import moment from "moment"
 import { Link } from "react-router-dom";
 import ChartTempKontor from '../components/ChartTempKontor'
 
-const FROMDATE = '2019-04-05T00:12:00Z'
-const TODATE = '2019-04-06T00:16:00Z'
-const API_FETCH_URL = '/api/iottimeseries/v3/timeseries/2271ff4bcc0b48e88109909c158e0142/Temperatur_Fryser?from=' + FROMDATE + '&to=' + TODATE
+// Test API URL
+const TEST_KONTOR_API_URL = 'http://labs.anbmedia.no/json/API/Kontor.json'
 
 class DashboardKontor extends React.Component {
 
@@ -25,12 +24,80 @@ class DashboardKontor extends React.Component {
 
             // Initiering av datovelger
             startDate: moment().subtract(1, 'days'), endDate: moment(),
+
+            // API States
+            temperature: [], humidity: [], timeStamp: [],
+
+            // isFetched states
+            KontorIsFetched: false, 
         }
+    }
+
+    // Funksjon for å hente inn temperaturdata og fuktighet Funksjonen tar hensyn til response limit.
+    FetchAPI(requestURL) {
+        fetch(requestURL/*, this.HeaderCredentials*/)
+        .then(response => {
+            let Responseheader = response.headers.get('Link')
+            console.log('Linkheader :', Responseheader)
+            response.json()
+            .then(data => this.setState({
+                temperature: this.state.temperature.concat(data.map((temp) => temp.Temperature)),
+                humidity: this.state.humidity.concat(data.map((hum) => hum.Humidity)),
+                timeStamp: this.state.timeStamp.concat(data.map((time) => time._time))
+            }))
+            if (Responseheader){
+                let nextPageUrl = Responseheader.match(/\bhttps?:\/\/\S+Z/gi)
+                console.log('Next Page URL: ', nextPageUrl)
+                setTimeout(() => {
+                    this.FetchAPI(nextPageUrl)
+                }, 10000);
+        } else {
+                console.log('Done fetching FryseTemp API')
+                setTimeout(() => {
+                this.setState({ 
+                    KontorIsFetched: true
+                })
+                }, 1000)
+                return
+        }  
+        })
+        .catch(error => console.log('Fetching failed', error))
     }
 
 
     // Loading icon false after DOM loaded
     componentDidMount() {
+        // Forenkler header kredentials i API spørringene
+        let HeaderCredentials = {
+            credentials: 'include',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "x-xsrf-token": this.myXRSFToken,
+                "origin": `${window.location.protocol}//${window.location.host}`
+            }
+        }
+        
+        // Get XRSF token for å ta inn API
+        setTimeout(() => {    
+            var myXRSFToken;
+            var nameEQ = 'XSRF-TOKEN' + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) myXRSFToken = c.substring(nameEQ.length, c.length);
+            }      
+            console.log("myXRSFToken: " + myXRSFToken);
+                    
+        }, 1000);
+
+        // Få initialdata
+        setTimeout(() => {
+            this.FetchAPI(TEST_KONTOR_API_URL)
+        }, 2000);
+        
+
         this.myInterval = setInterval(() => { 
             this.setState({ loading: false });
         }, 3500);
@@ -72,8 +139,10 @@ class DashboardKontor extends React.Component {
 
     }
     
-
     render() {
+        // Deklarerer states for å slippe å bruke 'this.state' hele tiden.       
+        const { temperature, humidity, timeStamp, KontorIsFetched, loading} = this.state 
+
         // Loadingspinner
         let loader = null;
         if (this.state.loading) {
@@ -86,7 +155,7 @@ class DashboardKontor extends React.Component {
         let label = start + ' - ' + end;
         if (start === end) {
             label = start;
-        } 
+        }
 
         // Lokale endringer i datovelger
         let locale = {
@@ -118,7 +187,7 @@ class DashboardKontor extends React.Component {
                             </Breadcrumb>                          
                         </div>
                         </Col>
-                        <Col lg={3}>
+                        <Col lg={3} className="d-flex justify-content-end">
                             <Datovelger
                                 timePicker={true}
                                 timePicker24Hour={true}
@@ -142,12 +211,19 @@ class DashboardKontor extends React.Component {
                     </div>                               
                     {/* Slutt Breadcrumb */}
 
-                    {/* ColdStorageChart */}
+                    {/* Kontorchart */}
+                    { KontorIsFetched && !loading ? 
                     <div className="row">
                         <Col lg={12}>
-                            <ChartTempKontor />
+                            <ChartTempKontor
+                                    temperatureIn={temperature}
+                                    humidityIn={humidity}
+                                    timeStampIn={timeStamp}
+                            />
                         </Col>
-                    </div>
+                    </div> : <Alert variant="info">
+                     Laster inn data fra MindSphere. Vennligst vent.
+                    </Alert>}
 
                     {/* Footer */}
                     <div className="flex-grow-1"></div>

@@ -1,20 +1,163 @@
 import React from 'react';
-import {Row, Col, Breadcrumb, Table, Button} from 'react-bootstrap';
+import {Row, Col, Alert, Breadcrumb, Table, Button} from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import Navigation from '../components/Navigation/Navigation';
 import Footer from '../components/Footer';
+import Loader from '../components/Common/Loader';
+import Datovelger from 'react-bootstrap-daterangepicker'
+import 'bootstrap-daterangepicker/daterangepicker.css'
 import * as Icon from 'react-feather';
+import moment from "moment"
+
+// Test API URL
+const TEST_KONTOR_API_URL = 'http://labs.anbmedia.no/json/API/Kontor.json'
 
 class DatatabellKokeprosess extends React.Component {
-    state = {
-        sideMenu: true
-    };
+    constructor(props){
+        super(props)
+        this.state = {
+            // Static
+            loading: true, sideMenu: true, error: null,
 
+            // Initiering av datovelger
+            startDate: moment().subtract(1, 'days'), endDate: moment(),
+
+            // API States
+            apiData: [],
+
+            // isFetched states
+            KontorIsFetched: false, 
+        }
+    }
+
+    // Funksjon for å hente inn temperaturdata og fuktighet Funksjonen tar hensyn til response limit.
+    FetchAPI(requestURL) {
+        fetch(requestURL/*, this.HeaderCredentials*/)
+        .then(response => {
+            let Responseheader = response.headers.get('Link')
+            console.log('Linkheader :', Responseheader)
+            response.json()
+            .then(data => this.setState({
+                apiData: this.state.apiData.concat(data)
+            }))
+            if (Responseheader){
+                let nextPageUrl = Responseheader.match(/\bhttps?:\/\/\S+Z/gi)
+                console.log('Next Page URL: ', nextPageUrl)
+                setTimeout(() => {
+                    this.FetchAPI(nextPageUrl)
+                }, 10000);
+        } else {
+                console.log('Done fetching FryseTemp API')
+                setTimeout(() => {
+                this.setState({ 
+                    KontorIsFetched: true
+                })
+                }, 1000)
+                return
+        }  
+        })
+        .catch(error => console.log('Fetching failed', error))
+    }
+
+
+    // Loading icon false after DOM loaded
+    componentDidMount() {
+        // Forenkler header kredentials i API spørringene
+        let HeaderCredentials = {
+            credentials: 'include',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "x-xsrf-token": this.myXRSFToken,
+                "origin": `${window.location.protocol}//${window.location.host}`
+            }
+        }
+        
+        // Get XRSF token for å ta inn API
+        setTimeout(() => {    
+            var myXRSFToken;
+            var nameEQ = 'XSRF-TOKEN' + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) myXRSFToken = c.substring(nameEQ.length, c.length);
+            }      
+            console.log("myXRSFToken: " + myXRSFToken);
+                    
+        }, 1000);
+
+        // Få initialdata
+        setTimeout(() => {
+            this.FetchAPI(TEST_KONTOR_API_URL)
+        }, 2000);
+        
+
+        this.myInterval = setInterval(() => { 
+            this.setState({ loading: false });
+        }, 3500);
+
+    }
+
+    componentWillUnmount(){
+        clearInterval(this.myInterval);
+    }
+
+    // Toggle side bar menu
     _onSideMenu = (active) => {
         this.setState({sideMenu: active});
     }
 
+    // Funksjon for å handle datovelger
+    handleApply(event, picker){
+        this.setState({
+            startDate: picker.startDate,
+            endDate: picker.endDate
+        })
+        
+        // Parser dataen for å få rett format til MindSphere
+        let APISTARTDATO = moment(this.state.startDate._d).toISOString().slice(0,-5) + "Z"
+        let APISLUTTDATO = moment(this.state.endDate._d).toISOString().slice(0,-5) + "Z"
+
+        console.log('Startdato: ', APISTARTDATO)
+        console.log('Sluttdato: ', APISLUTTDATO)
+
+        // Sett loader på
+        this.setState({
+            loading: true
+        })
+    
+        // Starter ny fething her
+        setTimeout(() => {
+            // URL + APISTARTDATO + '&to=' + APISLUTTDATO
+        }, 500);
+
+    }
+    
     render() {
+        // Deklarerer states for å slippe å bruke 'this.state' hele tiden.       
+        const { apiData, KontorIsFetched, loading} = this.state 
+
+        // Loadingspinner
+        let loader = null;
+        if (this.state.loading) {
+            loader = <Loader message="Loading..." />
+        }
+
+        // Label på datovelger
+        let start = this.state.startDate.format('DD.MM.YYYY');
+        let end = this.state.endDate.format('DD.MM.YYYY');
+        let label = start + ' - ' + end;
+        if (start === end) {
+            label = start;
+        }
+
+        // Lokale endringer i datovelger
+        let locale = {
+            applyLabel: 'Velg dato',
+            cancelLabel: 'Lukk',
+        }
+
         return (
             <div className="page-wrapper">
                 {/* Navigation */}
@@ -22,408 +165,90 @@ class DatatabellKokeprosess extends React.Component {
                 {/* End Navigation */}
 
                 <div className={`main-content d-flex flex-column ${this.state.sideMenu ? '' : 'hide-sidemenu'}`}>
-                    {/* Breadcrumb */}
-                    <div className="main-content-header">
-                        <Breadcrumb>
-                            <h1>Datatabell</h1>
-                            <Link to="/dashboard" className="breadcrumb-item">
-                                Tilbake til Dashboard
-                            </Link>
-                            <Breadcrumb.Item active>Kokeprosess</Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div>
-                    {/* End Breadcrumb */}
+                    {/* Loader */}
+                    {loader}
+                    {/* End Loader */}
+
+                    {/* Start Breadcrumb and datepicker*/}
+                    <div className="row">
+                        <Col lg={9}>
+                        <div className="main-content-header">               
+                            <Breadcrumb>
+                                <h1>Dashboard</h1>
+                                <Link to="/dashboard" className="breadcrumb-item">
+                                    Tilbake til dashboard
+                                </Link>
+                                <Breadcrumb.Item active>Datatabell kontor</Breadcrumb.Item>
+                            </Breadcrumb>                          
+                        </div>
+                        </Col>
+                        <Col lg={3} className="d-flex justify-content-end">
+                            <Datovelger
+                                timePicker={true}
+                                timePicker24Hour={true}
+                                locale={locale}
+                                minDate="04/10/2019"
+                                opens="left"
+                                startDate={this.state.startDate}
+                                endDate={this.state.endDate}
+                                onApply={this.handleApply}
+                                >
+                                <div className="float-right input-group">
+                                    <input type="text" className="form-control" value={label}/>
+                                    <span className="input-group-btn">
+                                        <Button className="date-toggle-iconbutton">
+                                            <Icon.Calendar className="date-toggle-icon"/>
+                                        </Button>
+                                    </span>
+                                </div>                                
+                            </Datovelger>
+                        </Col>
+                    </div>                               
+                    {/* Slutt Breadcrumb */}
 
                     {/* Basic Table */}
                     <Row>
                         <Col xl={12}>
+                            { KontorIsFetched && !loading ? 
                             <div className="card mb-4">
                                 <div className="card-body">
                                     <div className="card-header">
-                                        <h5 className="card-title">Basic Table</h5>
+                                        <h5 className="card-title">Datatabell</h5>
                                     </div>
                                     
                                     <Table responsive hover className="m-0">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
-                                                <th>Date</th>
-                                                <th className="text-center">Pages / Visit</th>
-                                                <th className="text-center">New user</th>
-                                                <th className="text-center">Last week</th>
+                                                <th className="text-center">#</th>
+                                                <th className="text-center">Dato og klokkeslett</th>
+                                                <th className="text-center">Temperatur °C</th>
+                                                <th className="text-center">Fuktighet %</th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>02.01.2019</td>
-                                                <td className="text-center">5000</td>
-                                                <td className="text-center">1000</td>
-                                                <td className="text-center">4500</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>02.02.2019</td>
-                                                <td className="text-center">5400</td>
-                                                <td className="text-center">1400</td>
-                                                <td className="text-center">4700</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>02.03.2019</td>
-                                                <td className="text-center">5500</td>
-                                                <td className="text-center">1400</td>
-                                                <td className="text-center">7600</td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>02.04.2019</td>
-                                                <td className="text-center">7400</td>
-                                                <td className="text-center">4500</td>
-                                                <td className="text-center">8700</td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>02.05.2019</td>
-                                                <td className="text-center">7600</td>
-                                                <td className="text-center">2300</td>
-                                                <td className="text-center">5400</td>
-                                            </tr>
+                                            {
+                                                this.state.apiData.map((item, key) => {
+                                                    return (
+                                                    <tr>
+                                                        <td className="text-center">{key}</td>
+                                                        <td className="text-center">{moment(item._time).format('DD.MM.YYYY HH:mm:ss')}</td>
+                                                        <td className="text-center">{item.Temperature}</td>
+                                                        <td className="text-center">{item.Humidity}</td>
+                                                    </tr>)
+
+                                                })
+                                            }
+
                                         </tbody>
                                     </Table>
                                 </div>
-                            </div>
+                            </div> : <Alert variant="info">
+                     Laster inn data fra MindSphere. Vennligst vent.
+                    </Alert>}
                         </Col>
                     </Row>
                     {/* End Basic Table */}
-
-                    {/* Data Table */}
-                    <Row> 
-                        <Col xl={12}>
-                            <div className="card mb-4">
-                                <div className="card-body">
-                                    <div className="card-header">
-                                        <h5 className="card-title">Data Table</h5>
-                                    </div>
-                                    
-                                    <Table responsive hover className="m-0">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Date</th>
-                                                <th className="text-center">Status</th>
-                                                <th className="text-center">Action</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Aaron Rossi</td>
-                                                <td>aaron@GrammarList.com</td>
-                                                <td>02.01.2019</td>
-                                                <td className="text-center">
-                                                    <span className="badge badge-info">Pending</span>
-                                                </td>
-                                                <td className="text-center">
-                                                    <Button variant="link text-success p-0 mr-2">
-                                                        <Icon.Edit2
-                                                            className="icon wh-15"
-                                                        />
-                                                    </Button>
-                                                    <Button variant="link text-danger p-0">
-                                                        <Icon.X
-                                                            className="icon wh-15"
-                                                        />
-                                                    </Button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Brad Joe</td>
-                                                <td>brad.joe@gmail.com</td>
-                                                <td>02.02.2019</td>
-                                                <td className="text-center">
-                                                    <span className="badge badge-success">Active</span>
-                                                </td>
-                                                <td className="text-center">
-                                                    <Button variant="link text-success p-0 mr-2">
-                                                        <Icon.Edit2
-                                                            className="icon wh-15"
-                                                        />
-                                                    </Button>
-                                                    <Button variant="link text-danger p-0">
-                                                        <Icon.X
-                                                            className="icon wh-15"
-                                                        />
-                                                    </Button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>Mitch Petty</td>
-                                                <td>mitch.petty@gmail.com</td>
-                                                <td>02.03.2019</td>
-                                                <td className="text-center">
-                                                    <span className="badge badge-warning">Not Active</span>
-                                                </td>
-                                                <td className="text-center">
-                                                    <Button variant="link text-success p-0 mr-2">
-                                                        <Icon.Edit2
-                                                            className="icon wh-15"
-                                                        />
-                                                    </Button>
-                                                    <Button variant="link text-danger p-0">
-                                                        <Icon.X
-                                                            className="icon wh-15"
-                                                        />
-                                                    </Button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>Philip</td>
-                                                <td>philip@gmail.com</td>
-                                                <td>02.04.2019</td>
-                                                <td className="text-center">
-                                                    <span className="badge badge-success">Active</span>
-                                                </td>
-                                                <td className="text-center">
-                                                    <Button variant="link text-success p-0 mr-2">
-                                                        <Icon.Edit2
-                                                            className="icon wh-15"
-                                                        />
-                                                    </Button>
-                                                    <Button variant="link text-danger p-0">
-                                                        <Icon.X
-                                                            className="icon wh-15"
-                                                        />
-                                                    </Button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>Nelms</td>
-                                                <td>nelms@gmail.com</td>
-                                                <td>02.05.2019</td>
-                                                <td className="text-center">
-                                                    <span className="badge badge-success">Active</span>
-                                                </td>
-                                                <td className="text-center">
-                                                    <Button variant="link text-success p-0 mr-2">
-                                                        <Icon.Edit2
-                                                            className="icon wh-15"
-                                                        />
-                                                    </Button>
-                                                    <Button variant="link text-danger p-0">
-                                                        <Icon.X
-                                                            className="icon wh-15"
-                                                        />
-                                                    </Button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </Table>
-                                </div>
-                            </div>
-                        </Col>
-                    </Row>
-                    {/* End Data Table */}
- 
-                    {/* Dark Table */}
-                    <Row>
-                        <Col xl={12}>
-                            <div className="card mb-4">
-                                <div className="card-body">
-                                    <div className="card-header">
-                                        <h5 className="card-title">Dark Table</h5>
-                                    </div>
-                                    
-                                    <Table responsive hover variant="dark" className="m-0">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Date</th>
-                                                <th className="text-center">Pages / Visit</th>
-                                                <th className="text-center">New user</th>
-                                                <th className="text-center">Last week</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>02.01.2019</td>
-                                                <td className="text-center">5000</td>
-                                                <td className="text-center">1000</td>
-                                                <td className="text-center">4500</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>02.02.2019</td>
-                                                <td className="text-center">5400</td>
-                                                <td className="text-center">1400</td>
-                                                <td className="text-center">4700</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>02.03.2019</td>
-                                                <td className="text-center">5500</td>
-                                                <td className="text-center">1400</td>
-                                                <td className="text-center">7600</td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>02.04.2019</td>
-                                                <td className="text-center">7400</td>
-                                                <td className="text-center">4500</td>
-                                                <td className="text-center">8700</td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>02.05.2019</td>
-                                                <td className="text-center">7600</td>
-                                                <td className="text-center">2300</td>
-                                                <td className="text-center">5400</td>
-                                            </tr>
-                                        </tbody>
-                                    </Table>
-                                </div>
-                            </div>
-                        </Col>
-                    </Row>
-                    {/* End Dark Table */}
- 
-                    {/* Striped Rows Table */}
-                    <Row>
-                        <Col xl={12}>
-                            <div className="card mb-4">
-                                <div className="card-body">
-                                    <div className="card-header">
-                                        <h5 className="card-title">Striped Rows Table</h5>
-                                    </div>
-                                    
-                                    <Table responsive hover striped className="m-0">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Date</th>
-                                                <th className="text-center">Pages / Visit</th>
-                                                <th className="text-center">New user</th>
-                                                <th className="text-center">Last week</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>02.01.2019</td>
-                                                <td className="text-center">5000</td>
-                                                <td className="text-center">1000</td>
-                                                <td className="text-center">4500</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>02.02.2019</td>
-                                                <td className="text-center">5400</td>
-                                                <td className="text-center">1400</td>
-                                                <td className="text-center">4700</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>02.03.2019</td>
-                                                <td className="text-center">5500</td>
-                                                <td className="text-center">1400</td>
-                                                <td className="text-center">7600</td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>02.04.2019</td>
-                                                <td className="text-center">7400</td>
-                                                <td className="text-center">4500</td>
-                                                <td className="text-center">8700</td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>02.05.2019</td>
-                                                <td className="text-center">7600</td>
-                                                <td className="text-center">2300</td>
-                                                <td className="text-center">5400</td>
-                                            </tr>
-                                        </tbody>
-                                    </Table>
-                                </div>
-                            </div>
-                        </Col>
-                    </Row>
-                    {/* End Striped Rows Table */}
-
-                    {/* Bordered Table */}
-                    <Row>
-                        <Col xl={12}>
-                            <div className="card mb-4">
-                                <div className="card-body">
-                                    <div className="card-header">
-                                        <h5 className="card-title">Bordered Table</h5>
-                                    </div>
-                                    
-                                    <Table responsive hover bordered className="m-0 text-center">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Date</th>
-                                                <th className="text-center">Pages / Visit</th>
-                                                <th className="text-center">New user</th>
-                                                <th className="text-center">Last week</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>02.01.2019</td>
-                                                <td className="text-center">5000</td>
-                                                <td className="text-center">1000</td>
-                                                <td className="text-center">4500</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>02.02.2019</td>
-                                                <td className="text-center">5400</td>
-                                                <td className="text-center">1400</td>
-                                                <td className="text-center">4700</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>02.03.2019</td>
-                                                <td className="text-center">5500</td>
-                                                <td className="text-center">1400</td>
-                                                <td className="text-center">7600</td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>02.04.2019</td>
-                                                <td className="text-center">7400</td>
-                                                <td className="text-center">4500</td>
-                                                <td className="text-center">8700</td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>02.05.2019</td>
-                                                <td className="text-center">7600</td>
-                                                <td className="text-center">2300</td>
-                                                <td className="text-center">5400</td>
-                                            </tr>
-                                        </tbody>
-                                    </Table>
-                                </div>
-                            </div>
-                        </Col>
-                    </Row>
-                    {/* End Bordered Table */}
 
                     {/* Footer  */}    
                     <div className="flex-grow-1"></div>

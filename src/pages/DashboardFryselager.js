@@ -278,7 +278,7 @@ class DashboardFryselager extends React.Component {
                             </Breadcrumb>                          
                         </div>
                         </Col>
-                        <Col lg={3}>
+                        <Col lg={3} className="d-flex justify-content-end">
                             <Datovelger
                                 timePicker={true}
                                 timePicker24Hour={true}
@@ -289,7 +289,7 @@ class DashboardFryselager extends React.Component {
                                 endDate={this.state.endDate}
                                 onApply={this.handleApply}
                                 >
-                                <div className="input-group">
+                                <div className="float-right input-group">
                                     <input type="text" className="form-control" value={label}/>
                                     <span className="input-group-btn">
                                         <Button className="date-toggle-iconbutton">
