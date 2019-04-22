@@ -55,7 +55,7 @@ class DashboardKontor extends React.Component {
                 console.log('Next Page URL: ', nextPageUrl)
                 setTimeout(() => {
                     this.FetchAPI(nextPageUrl)
-                }, 1000);
+                }, 1500);
         } else {
                 console.log('Done fetching FryseTemp API')
                 setTimeout(() => {
