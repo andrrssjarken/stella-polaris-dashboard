@@ -39,7 +39,7 @@ class DashboardFryselager extends React.Component {
           loading: true, sideMenu: true, error: null,
   
           // API States
-          fryserTemp: [], fryserTimeStamp: [], fryserVarsel: [],
+          fryserData: [], fryserTemp: [], fryserTimeStamp: [], fryserVarsel: [],
           k1Status: [], k1Forbruk: [], kForbrukTimeStamp: [], k1Driftstid: [],
           k2Status: [], k2Forbruk: [], k2Driftstid: [], 
           k3Status: [], k3Forbruk: [], k3Driftstid: [],  
@@ -61,6 +61,7 @@ class DashboardFryselager extends React.Component {
             console.log('Linkheader :', Responseheader)
             response.json()
             .then(data => this.setState({
+                fryserData: this.state.fryserData.concat(data),
                 fryserTemp: this.state.fryserTemp.concat(data.map((temp) => temp.Temperatur)),
                 fryserTimeStamp: this.state.fryserTimeStamp.concat(data.map((time) => time._time))
             }))
@@ -146,7 +147,7 @@ class DashboardFryselager extends React.Component {
 
         // Nuller ut states
         this.setState({
-            fryserTemp: [], fryserTimeStamp: [], fryserVarsel: [],
+            fryserData: [], fryserTemp: [], fryserTimeStamp: [], fryserVarsel: [],
             k1Forbruk: [], kForbrukTimeStamp: [], k2Forbruk: [], k3Forbruk: [], k4Forbruk: [],
             loading: true, kWhIsFetched: false, fryseTempIsFetched: false, loading: true
         })
@@ -261,7 +262,7 @@ class DashboardFryselager extends React.Component {
             k2Status, k2Forbruk, k2Driftstid, 
             k3Status, k3Forbruk, k3Driftstid, 
             k4Status, k4Forbruk, k4Driftstid,
-            fryseTempIsFetched, kWhIsFetched, staticIsFetched, 
+            fryserData, fryseTempIsFetched, kWhIsFetched, staticIsFetched, 
             fryserTemp, fryserTimeStamp, fryserVarsel } = this.state 
         
         // Lokale endringer i datovelger
@@ -269,6 +270,36 @@ class DashboardFryselager extends React.Component {
             applyLabel: 'Velg dato',
             cancelLabel: 'Lukk',
         }
+
+        // Legger til annotations ved gitte variabler
+        let fryserVarsel = []
+
+        fryserData.forEach(function(element, index){
+            if (element.Temperatur > -15) {
+                fryserVarsel.push(
+                {
+                    x: new Date(element._time).getTime(),
+                    y: element.Temperature,
+                    marker: {
+                        size: 8,
+                        fillColor: '#fff',
+                        strokeColor: 'red',
+                        radius: 2,
+                        cssClass: 'apexcharts-custom-class'
+                    },
+                    label: {
+                        borderColor: '#FF4560',
+                        offsetY: 0,
+                        style: {
+                            color: '#fff',
+                            background: '#FF4560',
+                        },
+                        text: 'Høy temperatur',
+                    },
+                }
+                )
+            }
+        })
         
         return (
             <div className="page-wrapper">
