@@ -31,6 +31,8 @@ class DashboardKontor extends React.Component {
             // isFetched states
             KontorIsFetched: false, 
         }
+
+        this.handleApply = this.handleApply.bind(this);
     }
 
     // Funksjon for å hente inn temperaturdata og fuktighet Funksjonen tar hensyn til response limit.
@@ -196,6 +198,7 @@ class DashboardKontor extends React.Component {
                                 opens="left"
                                 startDate={this.state.startDate}
                                 endDate={this.state.endDate}
+                                maxSpan={moment(3, 'days')}
                                 onApply={this.handleApply}
                                 >
                                 <div className="input-group">
