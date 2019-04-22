@@ -158,11 +158,11 @@ class DashboardFryselager extends React.Component {
     
         // Starter ny fething her
         setTimeout(() => {
-            this.FetchKompkWh(KOMP_KWH_API_URL + APISTARTDATO + '&to=' + APISLUTTDATO)
+            this.FetchKompkWh(KOMP_KWH_API_URL + '?from=' + APISTARTDATO + '&to=' + APISLUTTDATO)
         }, 500);
 
         setTimeout(() => {
-            this.FetchFryseTemp(TEMP_FRYSELAGER_API_URL + APISTARTDATO + '&to=' + APISLUTTDATO)
+            this.FetchFryseTemp(TEMP_FRYSELAGER_API_URL + '?from=' + APISTARTDATO + '&to=' + APISLUTTDATO)
         }, 500);
 
     }
@@ -209,11 +209,11 @@ class DashboardFryselager extends React.Component {
 
 
         setTimeout(() => {
-            this.FetchKompkWh(KOMP_KWH_API_URL)
+            this.FetchKompkWh(KOMP_KWH_API_URL + '?from=' + APISTARTDATO + '&to=' + APISLUTTDATO)
         }, 2000);
 
         setTimeout(() => {
-            this.FetchFryseTemp(TEMP_FRYSELAGER_API_URL)
+            this.FetchFryseTemp(TEMP_FRYSELAGER_API_URL + '?from=' + APISTARTDATO + '&to=' + APISLUTTDATO)
         }, 2000);
 
 

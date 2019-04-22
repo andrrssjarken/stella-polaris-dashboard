@@ -98,8 +98,9 @@ class DashboardKontor extends React.Component {
         }, 1000);
 
         // Få initialdata
+        
         setTimeout(() => {
-            this.FetchAPI(KONTOR_API_URL)
+            this.FetchAPI(KONTOR_API_URL + '?from=' + APISTARTDATO + '&to=' + APISLUTTDATO)
         }, 2000);
         
 
@@ -139,7 +140,7 @@ class DashboardKontor extends React.Component {
     
         // Starter ny fething her
         setTimeout(() => {
-            this.FetchAPI(KONTOR_API_URL + APISTARTDATO + '&to=' + APISLUTTDATO)
+            this.FetchAPI(KONTOR_API_URL + '?from=' + APISTARTDATO + '&to=' + APISLUTTDATO)
         }, 500);
 
     }
