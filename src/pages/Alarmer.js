@@ -163,7 +163,10 @@ class Alarmer extends React.Component {
                                                         <td className="text-center">{item.description}</td>
                                                         <td className="text-center">{item.severity}</td>
                                                         <td className="text-center">{item.entityId}</td>
-                                                        <td className="text-center">{item.acknowledged}</td>
+                                                        <td className="text-center">
+                                                            {item.acknowledged === true && <span className="badge badge-warning">Anerkjent</span>}
+                                                            {item.acknowledged === false && <span className="badge badge-danger">Ikke anerkjent</span>}
+                                                        </td>
                                                     </tr>)
                                                 })
                                             }
