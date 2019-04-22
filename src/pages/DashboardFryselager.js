@@ -277,7 +277,7 @@ class DashboardFryselager extends React.Component {
                 fryserVarsel.push(
                 {
                     x: new Date(element._time).getTime(),
-                    y: element.Temperature,
+                    y: element.Temperatur,
                     marker: {
                         size: 8,
                         fillColor: '#fff',
