@@ -31,6 +31,8 @@ class DatatabellKontor extends React.Component {
             // isFetched states
             KontorIsFetched: false, 
         }
+
+        this.handleApply = this.handleApply.bind(this)
     }
 
     // Funksjon for å hente inn temperaturdata og fuktighet Funksjonen tar hensyn til response limit.
@@ -121,6 +123,11 @@ class DatatabellKontor extends React.Component {
             startDate: picker.startDate,
             endDate: picker.endDate
         })
+
+        // Nuller ut states
+        this.setState({
+            apiData: [], KontorIsFetched: false, loading: true
+        })
         
         // Parser dataen for å få rett format til MindSphere
         let APISTARTDATO = moment(this.state.startDate._d).toISOString().slice(0,-5) + "Z"
@@ -129,10 +136,6 @@ class DatatabellKontor extends React.Component {
         console.log('Startdato: ', APISTARTDATO)
         console.log('Sluttdato: ', APISLUTTDATO)
 
-        // Sett loader på
-        this.setState({
-            loading: true
-        })
     
         // Starter ny fething her
         setTimeout(() => {

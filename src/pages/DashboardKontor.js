@@ -130,6 +130,11 @@ class DashboardKontor extends React.Component {
             startDate: picker.startDate,
             endDate: picker.endDate
         })
+
+        // Nuller ut states
+        this.setState({
+            temperature: [], humidity: [], timeStamp: [], KontorIsFetched: false, loading: true
+        })
         
         // Parser dataen for å få rett format til MindSphere
         let APISTARTDATO = moment(this.state.startDate._d).toISOString().slice(0,-5) + "Z"
@@ -138,10 +143,6 @@ class DashboardKontor extends React.Component {
         console.log('Ny Startdato: ', APISTARTDATO)
         console.log('Ny Sluttdato: ', APISLUTTDATO)
 
-        // Sett loader på
-        this.setState({
-            loading: true
-        })
     
         // Starter ny fething her
         setTimeout(() => {

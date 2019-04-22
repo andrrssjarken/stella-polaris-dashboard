@@ -44,7 +44,7 @@ class Alarmer extends React.Component {
             .then(data => {
                 this.setState({
                     alarmData: data,
-                    staticIsFetched: true
+                    alarmsIsFetched: true
 
             })
             console.log('Done fetching alarm data API')
@@ -108,7 +108,7 @@ class Alarmer extends React.Component {
         const { loading, alarmsIsFetched} = this.state 
 
         // Testing
-        console.log('Alarmdata: ', this.state.alarmData)
+        console.log('Alarmdata: ', this.state.alarmData._embedded.events[0].description)
 
         // Loadingspinner
         let loader = null;

@@ -68,7 +68,7 @@ class DashboardFryselager extends React.Component {
                 let nextPageUrl = Responseheader.match(/\bhttps?:\/\/\S+Z/gi)
                 console.log('Next Page URL: ', nextPageUrl)
                 setTimeout(() => {
-                    this.FetchAPI(nextPageUrl)
+                    this.FetchFryseTemp(nextPageUrl)
                 }, 1500);
         } else {
                 console.log('Done fetching FryseTemp API')
@@ -101,7 +101,7 @@ class DashboardFryselager extends React.Component {
                 let nextPageUrl = Responseheader.match(/\bhttps?:\/\/\S+Z/gi)
                 console.log('Next Page URL: ', nextPageUrl)
                 setTimeout(() => {
-                    this.FetchAPI(nextPageUrl)
+                    this.FetchKompkWh(nextPageUrl)
                 }, 1500);
         } else {
                 console.log('Done fetching Kompressor kWh API')
@@ -143,6 +143,13 @@ class DashboardFryselager extends React.Component {
             startDate: picker.startDate,
             endDate: picker.endDate
         })
+
+        // Nuller ut states
+        this.setState({
+            fryserTemp: [], fryserTimeStamp: [], fryserVarsel: [],
+            k1Forbruk: [], kForbrukTimeStamp: [], k2Forbruk: [], k3Forbruk: [], k4Forbruk: [],
+            loading: true, kWhIsFetched: false, fryseTempIsFetched: false, loading: true
+        })
         
         // Parser dataen for å få rett format til MindSphere
         let APISTARTDATO = moment(this.state.startDate._d).toISOString().slice(0,-5) + "Z"
@@ -150,11 +157,6 @@ class DashboardFryselager extends React.Component {
 
         console.log('Startdato: ', APISTARTDATO)
         console.log('Sluttdato: ', APISLUTTDATO)
-
-        // Sett loader på
-        this.setState({
-            loading: true
-        })
     
         // Starter ny fething her
         setTimeout(() => {
