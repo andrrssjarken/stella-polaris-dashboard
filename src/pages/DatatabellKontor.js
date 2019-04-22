@@ -175,8 +175,8 @@ class DatatabellKontor extends React.Component {
                         <div className="main-content-header">               
                             <Breadcrumb>
                                 <h1>Dashboard</h1>
-                                <Link to="/dashboard" className="breadcrumb-item">
-                                    Tilbake til dashboard
+                                <Link to="/dashboard-kontor" className="breadcrumb-item">
+                                    Tilbake til kontor
                                 </Link>
                                 <Breadcrumb.Item active>Datatabell kontor</Breadcrumb.Item>
                             </Breadcrumb>                          

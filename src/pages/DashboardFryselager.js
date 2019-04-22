@@ -49,7 +49,8 @@ class DashboardFryselager extends React.Component {
           fryseTempIsFetched: false, kWhIsFetched: false, staticIsFetched: false
         }
 
-        this.handleApply = this.handleApply.bind(this);
+        this.handleApply = this.handleApply.bind(this)
+        this.handleRefresh = this.handleRefresh.bind(this)
     }
 
     // Funksjon for å hente inn temperaturdata. Funksjonen tar hensyn til response limit.
@@ -166,6 +167,13 @@ class DashboardFryselager extends React.Component {
 
     }
 
+    handleRefresh(){
+        // Fetch Sanntidsdata
+        setTimeout(() => {
+            this.FetchStaticKompData(TEST_KOMP_STATUS_DRIFT_API_URL_SINGEL)
+        }, 2000);
+    }
+
     // Første gang, og vil bare rendre en gang. Som å bli født.
     componentDidMount() {
         
@@ -271,9 +279,6 @@ class DashboardFryselager extends React.Component {
                         <div className="main-content-header">               
                             <Breadcrumb>
                                 <h1>Dashboard</h1>
-                                <Link to="/dashboard" className="breadcrumb-item">
-                                    Tilbake til dashboard
-                                </Link>
                                 <Breadcrumb.Item active>Fryselager</Breadcrumb.Item>
                             </Breadcrumb>                          
                         </div>
@@ -320,7 +325,8 @@ class DashboardFryselager extends React.Component {
                         {/* CompressorTable and EnergyConsumption */}
                         <div className="row">
                             <Col lg={6}>
-                                <KompressorTabell 
+                                <KompressorTabell
+                                    handleRefresh={this.handleRefresh}
                                     k1_driftstid={k1Driftstid}
                                     k1_forbruk={k1Forbruk[k1Forbruk.length-1]}
                                     k1_status={k1Status}

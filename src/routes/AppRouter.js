@@ -1,7 +1,5 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-
-import Dashboard from '../pages/Dashboard';
 import DashboardFryselager from '../pages/DashboardFryselager';
 import DashboardKontor from '../pages/DashboardKontor'
 import DashboardKokeprosess from "../pages/DashboardKokeprosess";
@@ -17,9 +15,8 @@ import '../assets/css/responsive.css';
 const AppRouter = () => (
     <React.Fragment>
         <Route exact path="/" render={() => (
-            <Redirect to="/dashboard/" />
+            <Redirect to="/dashboard-fryselager/" />
         )} />
-        <Route path="/dashboard/" exact component={Dashboard} />
         <Route path="/dashboard-fryselager/" component={DashboardFryselager} />
         <Route path="/dashboard-kontor/" component={DashboardKontor}/>
         <Route path="/dashboard-kokeprosess/" component={DashboardKokeprosess}/>

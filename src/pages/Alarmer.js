@@ -1,6 +1,7 @@
 import React from 'react'
 import {Row, Col, Breadcrumb, Alert, Table} from 'react-bootstrap'
 import { Link } from "react-router-dom"
+import Loader from '../components/Common/Loader'
 import Navigation from '../components/Navigation/Navigation'
 import Footer from '../components/Footer'
 import moment from "moment"
@@ -9,7 +10,7 @@ import moment from "moment"
 const ALARM_API_URL = 'https://aej-stelladashboard-aej.eu1.mindsphere.io/api/eventmanagement/v3/events?page=0&size=20&sort=timestamp%2Cdesc&history=true'
 
 // Test API URL
-const TEST_ALARM_API_URL = 'http://labs.anbmedia.no/json/API/Kontor.json'
+const TEST_ALARM_API_URL = 'http://labs.anbmedia.no/json/API/Alarmer.json'
 
 const TEST_TEMP_FRYSELAGER_API_URL = 'http://labs.anbmedia.no/json/API/TempFryser.json'
 
@@ -28,7 +29,7 @@ class Alarmer extends React.Component {
             loading: true, sideMenu: true, error: null,
 
             // Data state
-            alarmData: [],
+            alarmData: null,
 
             // isFetched states
             alarmsIsFetched: false, 
@@ -39,7 +40,7 @@ class Alarmer extends React.Component {
     // Funksjon for å hente de 20 siste inn alarmene.
     // Henter inn siste statiske data for kompressorer. Status og drifttid.
     FetchAPI(requestURL) {
-        fetch(requestURL/*, this.HeaderCredentials*/)
+        fetch(requestURL, this.HeaderCredentials)
             .then(res => res.json())
             .then(data => {
                 this.setState({
@@ -47,14 +48,25 @@ class Alarmer extends React.Component {
                     staticIsFetched: true
 
             })
-            console.log('Done fetching static komp API')
+            console.log('Done fetching alarm data API')
         })
-        .catch(error => console.log('Fetching static komp data failed', error))    
+        .catch(error => console.log('Fetching alarm data failed', error))
     }
 
 
     // Loading icon false after DOM loaded
     componentDidMount() {
+        
+        // Forenkler header kredentials i API spørringene
+        let HeaderCredentials = {
+            credentials: 'include',
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+              "x-xsrf-token": this.myXRSFToken,
+              "origin": `${window.location.protocol}//${window.location.host}`
+            }
+        }
         
         // Get XRSF token for å ta inn API
         setTimeout(() => {    
@@ -62,17 +74,17 @@ class Alarmer extends React.Component {
             var nameEQ = 'XSRF-TOKEN' + "=";
             var ca = document.cookie.split(';');
             for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) === 0) myXRSFToken = c.substring(nameEQ.length, c.length);
+              var c = ca[i];
+              while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+              if (c.indexOf(nameEQ) === 0) myXRSFToken = c.substring(nameEQ.length, c.length);
             }      
             console.log("myXRSFToken: " + myXRSFToken);
-                    
+                  
         }, 1000);
 
         // Få initialdata
         setTimeout(() => {
-            this.FetchAPI(TEST_TEMP_FRYSELAGER_API_URL)
+            this.FetchAPI(ALARM_API_URL)
         }, 2000);
         
 
@@ -95,7 +107,11 @@ class Alarmer extends React.Component {
         // Deklarerer states for å slippe å bruke 'this.state' hele tiden.       
         const { loading, alarmsIsFetched} = this.state 
 
-        console.log(this.state.alarmData)
+        // Loadingspinner
+        let loader = null;
+        if (this.state.loading) {
+            loader = <Loader message="Loading..." />
+        }
 
         return (
             <div className="page-wrapper">
@@ -104,18 +120,18 @@ class Alarmer extends React.Component {
                 {/* End Navigation */}
 
                 <div className={`main-content d-flex flex-column ${this.state.sideMenu ? '' : 'hide-sidemenu'}`}>
+                    {/* Loading */}
+                    {loader}
+                    {/* Slutt Loader */}
+
                     {/* Breadcrumb */}
                     <div className="main-content-header">
                         <Breadcrumb>
                             <h1>Alarmer</h1>
-                            <Link to="/dashboard" className="breadcrumb-item">
-                                Tilbake til dashboard
-                            </Link>
-                            <Breadcrumb.Item active>Alarmer</Breadcrumb.Item>
+                            <Breadcrumb.Item active>Oversikt over alarmer</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                     {/* End Breadcrumb */}
-
                     <Row>
                         <Col xl={12}>
                             { alarmsIsFetched && !loading ? 
@@ -161,40 +177,6 @@ class Alarmer extends React.Component {
                     </Alert>}
                         </Col>
                     </Row>
-
-
-
-                    {/* Default Alerts */}
-                    <Row>
-                        <Col lg={12}>
-                            <div className="card mb-4">
-                                <div className="card-body">
-                                    <div className="card-header">
-                                        <h5 className="card-title">Default Alerts</h5>
-                                    </div>
-                                    {
-                                        [
-                                            'primary',
-                                            'secondary',
-                                            'success',
-                                            'danger',
-                                            'warning',
-                                            'info',
-                                            'light',
-                                            'dark',
-                                        ].map((variant, idx) => (
-                                            <Alert key={idx} variant={variant}>
-                                                This is a {variant} alert—check it out!
-                                            </Alert>
-                                        ))
-                                    }
-                                </div>
-                            </div>
-                        </Col>
-                    </Row>
-                    {/* End Default Alerts */}
-                    
-
                     {/* Footer  */}    
                     <div className="flex-grow-1"></div>
                     <Footer />

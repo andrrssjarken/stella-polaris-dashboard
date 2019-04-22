@@ -11,13 +11,6 @@ class SideMenuDark extends React.Component {
                 <Navbar className={`sidemenu ${this.props.sideMenu ? 'hide-nav-title' : ''}`} >
                     <Navbar.Collapse>
                         <Nav>
-                           <NavLink to="/dashboard/" className="nav-link">
-                                <Icon.Grid 
-                                    className="icon"
-                                /> 
-                                <span className="title">Dashboard</span>
-                            </NavLink>
-
                             <NavLink to="/dashboard-fryselager/" className="nav-link">
                                 <Icon.BarChart2 
                                     className="icon"
@@ -78,7 +71,7 @@ class SideMenuDark extends React.Component {
                                     <Icon.Database 
                                         className="icon" 
                                     /> 
-                                    Kokeprosess
+                                    Kontor
                                 </NavLink>
 
                             </NavDropdown>

@@ -26,8 +26,8 @@ class DatatabellFryselager extends React.Component {
                     <div className="main-content-header">
                         <Breadcrumb>
                             <h1>Datatabell</h1>
-                            <Link to="/dashboard" className="breadcrumb-item">
-                                Tilbake til dashboard
+                            <Link to="/dashboard-fryselager" className="breadcrumb-item">
+                                Tilbake til fryselager
                             </Link>
                             <Breadcrumb.Item active>Fryselager</Breadcrumb.Item>
                         </Breadcrumb>

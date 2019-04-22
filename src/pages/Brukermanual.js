@@ -34,10 +34,7 @@ class Faq extends React.Component {
                     <div className="main-content-header">
                         <Breadcrumb>
                             <h1>Brukermanual</h1>
-                            <Link to="/dashboard" className="breadcrumb-item">
-                                Tilbake til dashboard
-                            </Link>
-                            <Breadcrumb.Item active>Brukermanual</Breadcrumb.Item>
+                            <Breadcrumb.Item active>Informasjon om løsningen</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                     {/* End Breadcrumb */}

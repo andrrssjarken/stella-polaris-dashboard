@@ -3,13 +3,17 @@ import { Table, Button } from 'react-bootstrap';
 
 class KompressorTabell extends React.Component {
 
+    handleRefresh = (e) => {
+        this.props.handleRefresh()
+     }
+
     render() {
 
         return (
             <div className="card mb-4">
                 <div className="card-body">
                     <div className="card-header">
-                        <Button variant="outline-primary btn-sm" className="float-right refresh-button">Oppdater data</Button> 
+                        <Button variant="outline-primary btn-sm" onClick={this.handleRefresh} className="float-right refresh-button">Oppdater data</Button> 
                         <h5 className="card-title">Frysekompressorer - Sanntidsdata</h5>       
                     </div>
 
