@@ -73,7 +73,7 @@ class SideMenuDark extends React.Component {
                                 </NavLink>
                                 <NavLink 
                                     activeClassName="drpMenu"
-                                    to="/datatabell-kokeprosess/" 
+                                    to="/datatabell-kontor/" 
                                     className="dropdown-item"> 
                                     <Icon.Database 
                                         className="icon" 

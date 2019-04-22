@@ -7,7 +7,7 @@ import DashboardKontor from '../pages/DashboardKontor'
 import DashboardKokeprosess from "../pages/DashboardKokeprosess";
 import Alarmer from '../pages/Alarmer';
 import DatatabellFryselager from '../pages/DatatabellFryselager';
-import DatatabellKokeprosess from '../pages/DatatabellKokeprosess';
+import DatatabellKontor from '../pages/DatatabellKontor';
 import Brukermanual from '../pages/Brukermanual';
 
 import '../assets/css/style.css';
@@ -24,7 +24,7 @@ const AppRouter = () => (
         <Route path="/dashboard-kontor/" component={DashboardKontor}/>
         <Route path="/dashboard-kokeprosess/" component={DashboardKokeprosess}/>
         <Route path="/alarmer/" component={Alarmer} />
-        <Route path="/datatabell-kokeprosess/" component={DatatabellKokeprosess}/>
+        <Route path="/datatabell-kontor/" component={DatatabellKontor}/>
         <Route path="/datatabell-fryselager/" component={DatatabellFryselager} />  
         <Route path="/brukermanual/" component={Brukermanual} />
     </React.Fragment>

@@ -12,7 +12,7 @@ import moment from "moment"
 // Test API URL
 const TEST_KONTOR_API_URL = 'http://labs.anbmedia.no/json/API/Kontor.json'
 
-class DatatabellKokeprosess extends React.Component {
+class DatatabellKontor extends React.Component {
     constructor(props){
         super(props)
         this.state = {
@@ -260,4 +260,4 @@ class DatatabellKokeprosess extends React.Component {
     }
 }
 
-export default DatatabellKokeprosess;
+export default DatatabellKontor;
