@@ -1,20 +1,174 @@
 import React from 'react';
-import {Row, Col, Breadcrumb, Table, Button} from 'react-bootstrap';
+import {Row, Col, Alert, Breadcrumb, Table, Button} from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import Navigation from '../components/Navigation/Navigation';
 import Footer from '../components/Footer';
+import Loader from '../components/Common/Loader';
+import Datovelger from 'react-bootstrap-daterangepicker'
+import 'bootstrap-daterangepicker/daterangepicker.css'
 import * as Icon from 'react-feather';
+import moment from "moment"
+
+//API URL
+const TEMP_FRYSELAGER_API_URL = '/api/iottimeseries/v3/timeseries/2271ff4bcc0b48e88109909c158e0142/Temperatur_Fryser' // ?from={FROMDATO}&to={TODATO}
+
+// Test API URL
+const TEST_KONTOR_API_URL = 'http://labs.anbmedia.no/json/API/Kontor.json'
 
 class DatatabellFryselager extends React.Component {
-    state = {
-        sideMenu: true
-    };
+    constructor(props){
+        super(props)
+        this.state = {
+            // Static
+            loading: true, sideMenu: true, error: null,
 
+            // Initiering av datovelger
+            startDate: moment().subtract(1, 'days'), endDate: moment(),
+
+            // API States
+            apiData: [],
+
+            // isFetched states
+            fryselagerIsFetched: false, 
+        }
+
+        this.handleApply = this.handleApply.bind(this)
+    }
+
+    // Funksjon for å hente inn temperaturdata og fuktighet Funksjonen tar hensyn til response limit.
+    FetchAPI(requestURL) {
+        fetch(requestURL, this.HeaderCredentials)
+        .then(response => {
+            let Responseheader = response.headers.get('Link')
+            console.log('Linkheader :', Responseheader)
+            response.json()
+            .then(data => this.setState({
+                apiData: this.state.apiData.concat(data)
+            }))
+            if (Responseheader){
+                let nextPageUrl = Responseheader.match(/\bhttps?:\/\/\S+Z/gi)
+                console.log('Next Page URL: ', nextPageUrl)
+                setTimeout(() => {
+                    this.FetchAPI(nextPageUrl)
+                }, 1500);
+        } else {
+                console.log('Done fetching FryseTemp API')
+                setTimeout(() => {
+                this.setState({ 
+                    fryselagerIsFetched: true
+                })
+                }, 1000)
+                return
+        }  
+        })
+        .catch(error => console.log('Fetching failed', error))
+    }
+
+
+    // Loading icon false after DOM loaded
+    componentDidMount() {
+        // Forenkler header kredentials i API spørringene
+        let HeaderCredentials = {
+            credentials: 'include',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "x-xsrf-token": this.myXRSFToken,
+                "origin": `${window.location.protocol}//${window.location.host}`
+            }
+        }
+        
+        // Get XRSF token for å ta inn API
+        setTimeout(() => {    
+            var myXRSFToken;
+            var nameEQ = 'XSRF-TOKEN' + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) myXRSFToken = c.substring(nameEQ.length, c.length);
+            }      
+            console.log("myXRSFToken: " + myXRSFToken);
+                    
+        }, 1000);
+
+        // Få initialdata
+        let INITALSTART = moment(this.state.startDate._d).toISOString().slice(0,-5) + "Z"
+        let INITIALEND = moment(this.state.endDate._d).toISOString().slice(0,-5) + "Z"
+
+
+        setTimeout(() => {
+            this.FetchAPI(TEMP_FRYSELAGER_API_URL + '?from=' + INITALSTART + '&to=' + INITIALEND)
+        }, 2000);
+        
+
+        this.myInterval = setInterval(() => { 
+            this.setState({ loading: false });
+        }, 3500);
+
+    }
+
+    componentWillUnmount(){
+        clearInterval(this.myInterval);
+    }
+
+    // Toggle side bar menu
     _onSideMenu = (active) => {
         this.setState({sideMenu: active});
     }
 
+    // Funksjon for å handle datovelger
+    handleApply(event, picker){
+        this.setState({
+            startDate: picker.startDate,
+            endDate: picker.endDate
+        })
+
+        // Nuller ut states
+        this.setState({
+            apiData: [], fryselagerIsFetched: false, loading: true
+        })
+        
+        // Parser dataen for å få rett format til MindSphere
+        let APISTARTDATO = moment(this.state.startDate._d).toISOString().slice(0,-5) + "Z"
+        let APISLUTTDATO = moment(this.state.endDate._d).toISOString().slice(0,-5) + "Z"
+
+        console.log('Startdato: ', APISTARTDATO)
+        console.log('Sluttdato: ', APISLUTTDATO)
+
+    
+        // Starter ny fething her
+        setTimeout(() => {
+            this.FetchAPI(TEMP_FRYSELAGER_API_URL + '?from=' + APISTARTDATO + '&to=' + APISLUTTDATO)
+        }, 500);
+
+
+    }
+
     render() {
+        // Deklarerer states for å slippe å bruke 'this.state' hele tiden.       
+        const { apiData, fryselagerIsFetched, loading} = this.state 
+
+        // Loadingspinner
+        let loader = null;
+        if (this.state.loading) {
+            loader = <Loader message="Loading..." />
+        }
+
+        // Label på datovelger
+        let start = this.state.startDate.format('DD.MM.YYYY');
+        let end = this.state.endDate.format('DD.MM.YYYY');
+        let label = start + ' - ' + end;
+        if (start === end) {
+            label = start;
+        }
+
+        // Lokale endringer i datovelger
+        let locale = {
+            applyLabel: 'Velg dato',
+            cancelLabel: 'Lukk',
+        }
+
         return (
             <div className="page-wrapper">
                 {/* Navigation */}
@@ -22,56 +176,88 @@ class DatatabellFryselager extends React.Component {
                 {/* End Navigation */}
 
                 <div className={`main-content d-flex flex-column ${this.state.sideMenu ? '' : 'hide-sidemenu'}`}>
-                    {/* Breadcrumb */}
-                    <div className="main-content-header">
-                        <Breadcrumb>
-                            <h1>Datatabell</h1>
-                            <Link to="/dashboard-fryselager" className="breadcrumb-item">
-                                Tilbake til fryselager
-                            </Link>
-                            <Breadcrumb.Item active>Fryselager</Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div>
-                    {/* End Breadcrumb */}
+                    {/* Loader */}
+                    {loader}
+                    {/* End Loader */}
+
+                    {/* Start Breadcrumb and datepicker*/}
+                    <div className="row">
+                        <Col lg={9}>
+                        <div className="main-content-header">               
+                            <Breadcrumb>
+                                <h1>Dashboard</h1>
+                                <Link to="/dashboard-fryselager" className="breadcrumb-item">
+                                    Tilbake til fryselager
+                                </Link>
+                                <Breadcrumb.Item active>Datatabell fryselager</Breadcrumb.Item>
+                            </Breadcrumb>                          
+                        </div>
+                        </Col>
+                        <Col lg={3} className="d-flex justify-content-end">
+                            <Datovelger
+                                timePicker={true}
+                                timePicker24Hour={true}
+                                locale={locale}
+                                minDate="04/10/2019"
+                                opens="left"
+                                startDate={this.state.startDate}
+                                endDate={this.state.endDate}
+                                onApply={this.handleApply}
+                                >
+                                <div className="float-right input-group">
+                                    <input type="text" className="form-control" value={label}/>
+                                    <span className="input-group-btn">
+                                        <Button className="date-toggle-iconbutton">
+                                            <Icon.Calendar className="date-toggle-icon"/>
+                                        </Button>
+                                    </span>
+                                </div>                                
+                            </Datovelger>
+                        </Col>
+                    </div>                               
+                    {/* Slutt Breadcrumb */}
 
                     {/* Basic Table */}
                     <Row>
                         <Col xl={12}>
+                            { fryselagerIsFetched && !loading ? 
                             <div className="card mb-4">
                                 <div className="card-body">
                                     <div className="card-header">
-                                        <h5 className="card-title">Basic Table</h5>
+                                        <h5 className="card-title">Datatabell</h5>
                                     </div>
                                     
                                     <Table responsive hover className="m-0">
                                         <thead>
                                             <tr>
-                                                <th className="text-center">Status</th>
-                                                <th>Enhet</th>
-                                                <th className="text-center">Driftstid</th>
-                                                <th className="text-center">Forbruk</th>
+                                                <th className="text-center">#</th>
+                                                <th className="text-center">Dato og klokkeslett</th>
+                                                <th className="text-center">Temperatur °C</th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
-                                            {/* Kompressor 1 */}
-                                            <tr>                            
-                                                <td className="text-center">
-                                                    {this.props.k1_status === true && <span className="badge badge-success">Aktiv</span>}
-                                                    {this.props.k1_status === false && <span className="badge badge-warning">Inaktiv</span>}                        
-                                                </td>
-                                                <td>Kompressor 1</td>
-                                                <td className="text-center">{this.props.k1_driftstid} timer</td>
-                                                <td className="text-center">{this.props.k1_forbruk} kWh</td>
-                                            </tr>
+                                            {
+                                                this.state.apiData.map((item, key) => {
+                                                    return (
+                                                    <tr>
+                                                        <td className="text-center">{key}</td>
+                                                        <td className="text-center">{moment(item._time).format('DD.MM.YYYY HH:mm:ss')}</td>
+                                                        <td className="text-center">{item.Temperatur}</td>
+                                                    </tr>)
+
+                                                })
+                                            }
 
                                         </tbody>
                                     </Table>
                                 </div>
-                            </div>
+                            </div> : <Alert variant="info">
+                     Laster inn data fra MindSphere. Vennligst vent.
+                    </Alert>}
                         </Col>
                     </Row>
-                    {/* End Bordered Table */}
+                    {/* End Basic Table */}
 
                     {/* Footer  */}    
                     <div className="flex-grow-1"></div>
