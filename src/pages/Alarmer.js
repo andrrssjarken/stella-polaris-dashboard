@@ -7,7 +7,7 @@ import Footer from '../components/Footer'
 import moment from "moment"
 
 // API URL
-const ALARM_API_URL = '/api/eventmanagement/v3/events?page=0&size=20&sort=timestamp%2Cdesc&history=true'
+const ALARM_API_URL = '/api/eventmanagement/v3/events?page=0&size=20&sort=timestamp%2Cdesc&history=false'
 
 // Test API URL
 const TEST_ALARM_API_URL = 'http://labs.anbmedia.no/json/API/Alarmer.json'
@@ -144,7 +144,6 @@ class Alarmer extends React.Component {
                                     <Table responsive hover className="m-0">
                                         <thead>
                                             <tr>
-                                                <th className="text-center">#</th>
                                                 <th className="text-center">Dato og klokkeslett</th>
                                                 <th className="text-center">Melding</th>
                                                 <th className="text-center">Viktighet</th>
@@ -158,7 +157,6 @@ class Alarmer extends React.Component {
                                                 this.state.alarmData._embedded.events.map((item, key) => {
                                                     return (
                                                     <tr key={key}>
-                                                        <td className="text-center">{key}</td>
                                                         <td className="text-center">{moment(item.timestamp).format('DD.MM.YYYY HH:mm:ss')}</td>
                                                         <td className="text-center">{item.description}</td>
                                                         <td className="text-center">{item.severity}</td>

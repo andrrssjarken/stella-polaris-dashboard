@@ -37,7 +37,7 @@ class Navigation extends React.Component {
         return (
             <div className="page-wrapper">
                 <Navbar fixed="top" className="top-menu">
-                    <Link to="/dashboard" className={`navbar-brand ${this.state.sideMenu ? 'navbar-logo' : ''}`}>
+                    <Link to="/dashboard-fryselager" className={`navbar-brand ${this.state.sideMenu ? 'navbar-logo' : ''}`}>
                         {/* Large logo */}
                         <Image src={Logo} alt="Logo" className="large-logo" /> 
                         {/* Small logo */}

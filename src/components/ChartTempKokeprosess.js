@@ -5,29 +5,29 @@ const series =
 {
     "kokekardata": {
         "temp": [
-            101.23,93.77,96.89,94.33,99.37,100.09,99.43,96.77,98.12,94.16,93.25,101.61,94.52,95.5,93.05,98.52,96.57,101.15,100.92,100.36
+            101.23,93.77,96.89,94.33,99.37,100.09,99.43,96.77,98.12,94.16,94.25,101.61,94.52,95.5,94.05,98.52,96.57,101.15,100.92,100.36
         ],
         "dates": [
-            "13 Nov 2018",
-            "14 Nov 2018",
-            "15 Nov 2018",
-            "16 Nov 2018",
-            "17 Nov 2018",
-            "20 Nov 2018",
-            "21 Nov 2018",
-            "22 Nov 2018",
-            "23 Nov 2018",
-            "24 Nov 2018",
-            "27 Nov 2018",
-            "28 Nov 2018",
-            "29 Nov 2018",
-            "30 Nov 2018",
-            "01 Dec 2018",
-            "04 Dec 2018",
-            "05 Dec 2018",
-            "06 Dec 2018",
-            "07 Dec 2018",
-            "08 Dec 2018"
+            "6 April 2019",
+            "7 April 2019",
+            "8 April 2019",
+            "9 April 2019",
+            "10 April 2019",
+            "11 April 2019",
+            "12 April 2019",
+            "13 April 2019",
+            "14 April 2019",
+            "15 April 2019",
+            "16 April 2019",
+            "17 April 2019",
+            "18 April 2019",
+            "19 April 2019",
+            "20 April 2019",
+            "21 April 2019",
+            "22 April 2019",
+            "23 April 2019",
+            "24 April 2019",
+            "25 April 2019"
         ]
     },
 
@@ -45,8 +45,8 @@ class ChartTempKokeprosess extends React.Component {
             options: {
                 annotations: {
                     points: [{
-                        x: new Date('1 Dec 2018').getTime(),
-                        y: 93.05,
+                        x: new Date('7 April 2019').getTime(),
+                        y: 93.77,
                         marker: {
                             size: 8,
                             fillColor: '#fff',
@@ -65,7 +65,7 @@ class ChartTempKokeprosess extends React.Component {
                         },
                     },
                     {
-                        x: new Date('20 Nov 2018').getTime(),
+                        x: new Date('11 April 2019').getTime(),
                         y: 90.13,
                         marker: {
                             size: 8,
@@ -83,7 +83,44 @@ class ChartTempKokeprosess extends React.Component {
                             },
                             text: 'Lav temperatur',
                         },
-                    },]
+                    },{
+                        x: new Date('15 April 2019').getTime(),
+                        y: 90.27,
+                        marker: {
+                            size: 8,
+                            fillColor: '#fff',
+                            strokeColor: 'red',
+                            radius: 2,
+                            cssClass: 'kokekar'
+                        },
+                        label: {
+                            borderColor: '#FF4560',
+                            offsetY: 0,
+                            style: {
+                                color: '#fff',
+                                background: '#FF4560',
+                            },
+                            text: 'Lav temperatur',
+                        },
+                    },{
+                        x: new Date('21 April 2019').getTime(),
+                        y: 90.42,
+                        marker: {
+                            size: 8,
+                            fillColor: '#fff',
+                            strokeColor: 'red',
+                            radius: 2,
+                            cssClass: 'kokekar'
+                        },
+                        label: {
+                            borderColor: '#FF4560',
+                            offsetY: 0,
+                            style: {
+                                color: '#fff',
+                                background: '#FF4560',
+                            },
+                            text: 'Lav temperatur',
+                        }}],
                 },
                 chart: {
                     height: 350,
