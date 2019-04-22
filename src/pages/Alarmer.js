@@ -155,21 +155,20 @@ class Alarmer extends React.Component {
 
                                         <tbody>
                                             {
-                                                this.state.alarmData.map((item, key) => {
+                                                this.state.alarmData._embedded.events.map((item, key) => {
                                                     return (
                                                     <tr key={key}>
                                                         <td className="text-center">{key}</td>
-                                                        <td className="text-center">{moment(item._embedded.events.timestamp).format('DD.MM.YYYY HH:mm:ss')}</td>
-                                                        <td className="text-center">{item._embedded.events.description}</td>
-                                                        <td className="text-center">{item._embedded.events.severity}</td>
-                                                        <td className="text-center">{item._embedded.events.entityId}</td>
-                                                        <td className="text-center">{item._embedded.events.acknowledged}</td>
+                                                        <td className="text-center">{moment(item.timestamp).format('DD.MM.YYYY HH:mm:ss')}</td>
+                                                        <td className="text-center">{item.description}</td>
+                                                        <td className="text-center">{item.severity}</td>
+                                                        <td className="text-center">{item.entityId}</td>
+                                                        <td className="text-center">{item.acknowledged}</td>
                                                     </tr>)
-
                                                 })
                                             }
-
                                         </tbody>
+
                                     </Table>
                                 </div>
                             </div> : <Alert variant="info">
