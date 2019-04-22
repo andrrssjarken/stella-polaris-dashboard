@@ -272,7 +272,6 @@ class DashboardFryselager extends React.Component {
         }
 
         // Legger til annotations ved gitte variabler
-
         fryserData.forEach(function(element, index){
             if (element.Temperatur > -15) {
                 fryserVarsel.push(
