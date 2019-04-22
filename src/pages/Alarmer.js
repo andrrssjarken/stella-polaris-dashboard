@@ -7,12 +7,11 @@ import Footer from '../components/Footer'
 import moment from "moment"
 
 // API URL
-const ALARM_API_URL = 'https://aej-stelladashboard-aej.eu1.mindsphere.io/api/eventmanagement/v3/events?page=0&size=20&sort=timestamp%2Cdesc&history=true'
+const ALARM_API_URL = '/api/eventmanagement/v3/events?page=0&size=20&sort=timestamp%2Cdesc&history=true'
 
 // Test API URL
 const TEST_ALARM_API_URL = 'http://labs.anbmedia.no/json/API/Alarmer.json'
 
-const TEST_TEMP_FRYSELAGER_API_URL = 'http://labs.anbmedia.no/json/API/TempFryser.json'
 
 /*
 embedded.events.timestamp

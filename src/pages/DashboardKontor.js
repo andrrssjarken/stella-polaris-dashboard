@@ -11,6 +11,9 @@ import moment from "moment"
 import { Link } from "react-router-dom";
 import ChartTempKontor from '../components/ChartTempKontor'
 
+//API URL
+const KONTOR_API_URL = '/api/iottimeseries/v3/timeseries/d014986bc5cb497fa4bced744e1afaa3/EnviromentData' // ?from={FROMDATO}&to={TODATO}
+
 // Test API URL
 const TEST_KONTOR_API_URL = 'http://labs.anbmedia.no/json/API/Kontor.json'
 
@@ -37,7 +40,7 @@ class DashboardKontor extends React.Component {
 
     // Funksjon for å hente inn temperaturdata og fuktighet Funksjonen tar hensyn til response limit.
     FetchAPI(requestURL) {
-        fetch(requestURL/*, this.HeaderCredentials*/)
+        fetch(requestURL, this.HeaderCredentials)
         .then(response => {
             let Responseheader = response.headers.get('Link')
             console.log('Linkheader :', Responseheader)
@@ -52,7 +55,7 @@ class DashboardKontor extends React.Component {
                 console.log('Next Page URL: ', nextPageUrl)
                 setTimeout(() => {
                     this.FetchAPI(nextPageUrl)
-                }, 10000);
+                }, 1000);
         } else {
                 console.log('Done fetching FryseTemp API')
                 setTimeout(() => {
@@ -96,7 +99,7 @@ class DashboardKontor extends React.Component {
 
         // Få initialdata
         setTimeout(() => {
-            this.FetchAPI(TEST_KONTOR_API_URL)
+            this.FetchAPI(KONTOR_API_URL)
         }, 2000);
         
 
@@ -136,7 +139,7 @@ class DashboardKontor extends React.Component {
     
         // Starter ny fething her
         setTimeout(() => {
-            // URL + APISTARTDATO + '&to=' + APISLUTTDATO
+            this.FetchAPI(KONTOR_API_URL + APISTARTDATO + '&to=' + APISLUTTDATO)
         }, 500);
 
     }

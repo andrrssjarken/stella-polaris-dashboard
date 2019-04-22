@@ -55,7 +55,7 @@ class DashboardFryselager extends React.Component {
 
     // Funksjon for å hente inn temperaturdata. Funksjonen tar hensyn til response limit.
     FetchFryseTemp(requestURL) {
-        fetch(requestURL/*, this.HeaderCredentials*/)
+        fetch(requestURL, this.HeaderCredentials)
         .then(response => {
             let Responseheader = response.headers.get('Link')
             console.log('Linkheader :', Responseheader)
@@ -69,7 +69,7 @@ class DashboardFryselager extends React.Component {
                 console.log('Next Page URL: ', nextPageUrl)
                 setTimeout(() => {
                     this.FetchAPI(nextPageUrl)
-                }, 10000);
+                }, 1500);
         } else {
                 console.log('Done fetching FryseTemp API')
                 setTimeout(() => {
@@ -85,7 +85,7 @@ class DashboardFryselager extends React.Component {
 
     // Funksjon for å hente inn kWh fra kompressorer. Funksjonen tar hensyn til response limit.
     FetchKompkWh(requestURL) {
-        fetch(requestURL/*, this.HeaderCredentials*/)
+        fetch(requestURL, this.HeaderCredentials)
         .then(response => {
             let Responseheader = response.headers.get('Link')
             console.log('Linkheader :', Responseheader)
@@ -102,7 +102,7 @@ class DashboardFryselager extends React.Component {
                 console.log('Next Page URL: ', nextPageUrl)
                 setTimeout(() => {
                     this.FetchAPI(nextPageUrl)
-                }, 2000);
+                }, 1500);
         } else {
                 console.log('Done fetching Kompressor kWh API')
                 setTimeout(() => {
@@ -117,7 +117,7 @@ class DashboardFryselager extends React.Component {
 
     // Henter inn siste statiske data for kompressorer. Status og drifttid.
     FetchStaticKompData(requestURL) {
-        fetch(requestURL/*, this.HeaderCredentials*/)
+        fetch(requestURL, this.HeaderCredentials)
             .then(res => res.json())
             .then(data => {
                 this.setState({
@@ -158,11 +158,11 @@ class DashboardFryselager extends React.Component {
     
         // Starter ny fething her
         setTimeout(() => {
-            this.FetchKompkWh(TEST_KOMP_KWH_API_URL + APISTARTDATO + '&to=' + APISLUTTDATO)
+            this.FetchKompkWh(KOMP_KWH_API_URL + APISTARTDATO + '&to=' + APISLUTTDATO)
         }, 500);
 
         setTimeout(() => {
-            this.FetchFryseTemp(TEST_TEMP_FRYSELAGER_API_URL + APISTARTDATO + '&to=' + APISLUTTDATO)
+            this.FetchFryseTemp(TEMP_FRYSELAGER_API_URL + APISTARTDATO + '&to=' + APISLUTTDATO)
         }, 500);
 
     }
@@ -170,7 +170,7 @@ class DashboardFryselager extends React.Component {
     handleRefresh(){
         // Fetch Sanntidsdata
         setTimeout(() => {
-            this.FetchStaticKompData(TEST_KOMP_STATUS_DRIFT_API_URL_SINGEL)
+            this.FetchStaticKompData(KOMP_STATUS_DRIFT_API_URL)
         }, 2000);
     }
 
@@ -204,16 +204,16 @@ class DashboardFryselager extends React.Component {
 
         // Fetch Sanntidsdata
         setTimeout(() => {
-            this.FetchStaticKompData(TEST_KOMP_STATUS_DRIFT_API_URL_SINGEL)
+            this.FetchStaticKompData(KOMP_STATUS_DRIFT_API_URL)
         }, 2000);
 
 
         setTimeout(() => {
-            this.FetchKompkWh(TEST_KOMP_KWH_API_URL)
+            this.FetchKompkWh(KOMP_KWH_API_URL)
         }, 2000);
 
         setTimeout(() => {
-            this.FetchFryseTemp(TEST_TEMP_FRYSELAGER_API_URL)
+            this.FetchFryseTemp(TEMP_FRYSELAGER_API_URL)
         }, 2000);
 
 
