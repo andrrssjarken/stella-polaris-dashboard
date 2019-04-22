@@ -91,8 +91,12 @@ class DatatabellKontor extends React.Component {
         }, 1000);
 
         // Få initialdata
+        let INITALSTART = moment(this.state.startDate._d).toISOString().slice(0,-5) + "Z"
+        let INITIALEND = moment(this.state.endDate._d).toISOString().slice(0,-5) + "Z"
+
+
         setTimeout(() => {
-            this.FetchAPI(KONTOR_API_URL)
+            this.FetchAPI(KONTOR_API_URL + '?from=' + INITALSTART + '&to=' + INITIALEND)
         }, 2000);
         
 
@@ -132,7 +136,7 @@ class DatatabellKontor extends React.Component {
     
         // Starter ny fething her
         setTimeout(() => {
-            this.FetchAPI(KONTOR_API_URL + APISTARTDATO + '&to=' + APISLUTTDATO)
+            this.FetchAPI(KONTOR_API_URL + '?from=' + APISTARTDATO + '&to=' + APISLUTTDATO)
         }, 500);
 
 

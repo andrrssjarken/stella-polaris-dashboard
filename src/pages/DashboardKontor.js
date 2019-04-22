@@ -98,10 +98,15 @@ class DashboardKontor extends React.Component {
         }, 1000);
 
         // Få initialdata
+        let INITALSTART = moment(this.state.startDate._d).toISOString().slice(0,-5) + "Z"
+        let INITIALEND = moment(this.state.endDate._d).toISOString().slice(0,-5) + "Z"
         
         setTimeout(() => {
-            this.FetchAPI(KONTOR_API_URL + '?from=' + APISTARTDATO + '&to=' + APISLUTTDATO)
+            this.FetchAPI(KONTOR_API_URL + '?from=' + INITALSTART + '&to=' + INITIALEND)
         }, 2000);
+
+        console.log('Initial Start: ', INITALSTART)
+        console.log('Initial End', INITIALEND)
         
 
         this.myInterval = setInterval(() => { 
@@ -130,8 +135,8 @@ class DashboardKontor extends React.Component {
         let APISTARTDATO = moment(this.state.startDate._d).toISOString().slice(0,-5) + "Z"
         let APISLUTTDATO = moment(this.state.endDate._d).toISOString().slice(0,-5) + "Z"
 
-        console.log('Startdato: ', APISTARTDATO)
-        console.log('Sluttdato: ', APISLUTTDATO)
+        console.log('Ny Startdato: ', APISTARTDATO)
+        console.log('Ny Sluttdato: ', APISLUTTDATO)
 
         // Sett loader på
         this.setState({

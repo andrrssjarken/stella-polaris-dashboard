@@ -103,8 +103,12 @@ class Alarmer extends React.Component {
     }
 
     render() {
+
         // Deklarerer states for å slippe å bruke 'this.state' hele tiden.       
         const { loading, alarmsIsFetched} = this.state 
+
+        // Testing
+        console.log('Alarmdata: ', this.state.alarmData)
 
         // Loadingspinner
         let loader = null;

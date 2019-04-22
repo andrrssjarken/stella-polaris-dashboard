@@ -207,13 +207,19 @@ class DashboardFryselager extends React.Component {
             this.FetchStaticKompData(KOMP_STATUS_DRIFT_API_URL)
         }, 2000);
 
+        // Få initialdata
+        let INITALSTART = moment(this.state.startDate._d).toISOString().slice(0,-5) + "Z"
+        let INITIALEND = moment(this.state.endDate._d).toISOString().slice(0,-5) + "Z"
+
+        console.log('Initial Start: ', INITALSTART)
+        console.log('Initial End', INITIALEND)
 
         setTimeout(() => {
-            this.FetchKompkWh(KOMP_KWH_API_URL + '?from=' + APISTARTDATO + '&to=' + APISLUTTDATO)
+            this.FetchKompkWh(KOMP_KWH_API_URL + '?from=' + INITALSTART + '&to=' + INITIALEND)
         }, 2000);
 
         setTimeout(() => {
-            this.FetchFryseTemp(TEMP_FRYSELAGER_API_URL + '?from=' + APISTARTDATO + '&to=' + APISLUTTDATO)
+            this.FetchFryseTemp(TEMP_FRYSELAGER_API_URL + '?from=' + INITALSTART + '&to=' + INITIALEND)
         }, 2000);
 
 
