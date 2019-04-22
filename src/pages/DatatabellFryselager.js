@@ -240,7 +240,7 @@ class DatatabellFryselager extends React.Component {
                                             {
                                                 this.state.apiData.map((item, key) => {
                                                     return (
-                                                    <tr>
+                                                    <tr key={key}>
                                                         <td className="text-center">{key}</td>
                                                         <td className="text-center">{moment(item._time).format('DD.MM.YYYY HH:mm:ss')}</td>
                                                         <td className="text-center">{item.Temperatur}</td>

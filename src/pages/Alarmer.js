@@ -28,7 +28,7 @@ class Alarmer extends React.Component {
             loading: true, sideMenu: true, error: null,
 
             // Data state
-            alarmData: null,
+            alarmData: [],
 
             // isFetched states
             alarmsIsFetched: false, 
@@ -157,7 +157,7 @@ class Alarmer extends React.Component {
                                             {
                                                 this.state.alarmData.map((item, key) => {
                                                     return (
-                                                    <tr>
+                                                    <tr key={key}>
                                                         <td className="text-center">{key}</td>
                                                         <td className="text-center">{moment(item._embedded.events.timestamp).format('DD.MM.YYYY HH:mm:ss')}</td>
                                                         <td className="text-center">{item._embedded.events.description}</td>
