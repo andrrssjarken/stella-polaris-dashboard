@@ -25,8 +25,8 @@ Pakker React i produksjonsmodus og optimaliserer filene for best mulig ytelse.
 
 ### MindSphere API
 
-Les om MindSphere API på følgende lenke.<br>
-[MindSphere Services](https://developer.mindsphere.io/apis/index.html) for å se siden i nettleseren.
+Les om [MindSphere API](https://developer.mindsphere.io/apis/index.html).<br>
+
 
 
 
