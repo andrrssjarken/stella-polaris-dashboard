@@ -1,38 +1,40 @@
 # Stella Polaris Dashboard
-Denne webapplikasjonen er en del av en bachelor i automasjon ved [Universitetet i Tromsø - Norges Arktiske universitet](https://uit.no/startsida)<br>
+Denne applikasjonen er en del av bacheloroppgaven i automasjon ved [Universitetet i Tromsø - Norges Arktiske universitet](https://uit.no/startsida).<br>
 
-Oppgaven er gitt av [Haneseth Automasjon](automasjon.haneseth.no) og levert 15. mai 2019<br>
+Oppgaven er gitt av [Haneseth Automasjon](automasjon.haneseth.no) og levert 15. mai 2019.<br>
 
 Se [rapporten i sin helhet](https://#).<br>
 Se [video av brukergrensesnittet](https://#).<br>
-
+<br>
 ## Lokalt utviklingsområde
-
-Åpne terminal/ledetekst og utfør følgende steg:
+Krever Node.js.
 ```
 cd stella-polaris-dashboard
 npm install
 npm start
 ```
 
-Kjør siden lokalt under utvikling.<br>
 Åpne [http://localhost:3000](http://localhost:3000) for å se siden i nettleseren.<br>
 Innhenting av API-er fra MindSphere vil ikke fungere lokalt.<br>
+<br>
+## Språk og dependencies
+Applikasjon er utviklet med React og React bootstrap.<br>
 
+Se [package.json](package.json) for en fullstendig liste over dependencies.<br>
+<br>
 
 ## MindSphere API
-
 Løsningen benytter primært [IoT Time Series Service ](https://developer.mindsphere.io/apis/index.html). Det finnes flere typer API-er som kan implementeres.<br>
 
 Les om de ulike API-ene på [MindSphere Services](https://developer.mindsphere.io/apis/index.html).<br>
-
+<br>
 ## Cloud Foundry
 
 Distribusjon av løsningen til Cloud Foundry.<br>
 
-manifest.yml - Cloud Foundry konfigurasjoner.<br>
-package.json - dependencies og pakker som Cloud Foundry installerer.
-
+[manifest.yml](manifest.yml) - Cloud Foundry konfigurasjoner.<br>
+[package.json](package.json) - dependencies som Cloud Foundry installerer.<br>
+<br>
 ### Oppskrift
 
 1. Åpne terminal/ledetekst
@@ -45,7 +47,7 @@ package.json - dependencies og pakker som Cloud Foundry installerer.
 
 
 Les mer om prosessen på [Running a Cloud Foundry-Hosted Application](https://developer.mindsphere.io/howto/howto-cf-running-app.html).<br>
-
+<br>
 ## Mulige forbedringer
 
 - [ ] Se på mulighetene for å benytte [IoT Time Series Aggregates Service](https://developer.mindsphere.io/apis/iot-iottsaggregates/api-iottsaggregates-overview.html)
