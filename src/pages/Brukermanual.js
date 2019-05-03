@@ -1,26 +1,20 @@
+// Import av dependencies og komponenter
 import React from 'react';
 import { Breadcrumb, Row, Col } from 'react-bootstrap';
-import { Link } from "react-router-dom";
 import Navigation from '../components/Navigation/Navigation';
 import Footer from '../components/Footer';
-import { 
-    Accordion, 
-    AccordionItem, 
-    AccordionItemTitle, 
-    AccordionItemBody 
-} from 'react-accessible-accordion';
+import { Accordion, AccordionItem, AccordionItemTitle, AccordionItemBody } from 'react-accessible-accordion';
 import 'react-accessible-accordion/dist/fancy-example.css';
-
 
 class Faq extends React.Component {
     state = {
         sideMenu: true
-    };
+    }
 
     // Toggle side bar menu
     _onSideMenu = (active) => {
         this.setState({sideMenu: active});
-    };
+    }
 
     render() {
         return (
@@ -37,9 +31,9 @@ class Faq extends React.Component {
                             <Breadcrumb.Item active>Informasjon om løsningen</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    {/* End Breadcrumb */}
+                    {/* Stopp Breadcrumb */}
 
-                    {/* Faq area */}
+                    {/* Faq / Accordion*/}
                     <Row> 
                         <Col lg={12}>
                             <Accordion className="custom-accordion mb-4">
@@ -108,12 +102,12 @@ class Faq extends React.Component {
                             </Accordion>
                         </Col>
                     </Row>
-                    {/* End Faq area */}
+                    {/* Stopp Faq / Accordion */}
 
                     {/* Footer  */}    
                     <div className="flex-grow-1"></div>
                     <Footer />
-                    {/* End Footer  */}
+                    {/* Stopp Footer  */}
                 </div>
             </div>
         );
