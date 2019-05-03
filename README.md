@@ -7,7 +7,7 @@ Se [rapporten i sin helhet](https://#).<br>
 Se [video av brukergrensesnittet](https://#).<br>
 <br>
 ## Lokalt utviklingsområde
-
+Krever Node.js.
 Åpne terminal/ledetekst og utfør følgende steg:
 ```
 cd stella-polaris-dashboard
