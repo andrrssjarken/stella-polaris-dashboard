@@ -48,7 +48,7 @@ Les mer om prosessen på [Running a Cloud Foundry-Hosted Application](https://de
 
 ## Mulige forberedninger
 
-- [] Finish my changes
+- [ ] Finish my changes
 - [ ] Push my commits to GitHub
 - [ ] Open a pull request
 
