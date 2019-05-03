@@ -49,6 +49,6 @@ Les mer om prosessen på [Running a Cloud Foundry-Hosted Application](https://de
 ## Mulige forberedninger
 
 - [ ] Se på mulighetene for å benytte [IoT Time Series Aggregates Service](https://developer.mindsphere.io/apis/iot-iottsaggregates/api-iottsaggregates-overview.html)
-- [ ] Kompressortabell oppdateres ved ny data.
+- [ ] Kompressortabell oppdateres automatisk ved ny data (loop).
 - [ ] Legge inn API for kokeprosess
 
