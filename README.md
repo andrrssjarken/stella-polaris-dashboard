@@ -40,7 +40,7 @@ package.json inneholder dependencies og pakker som Cloud Foundry installerer ved
 7. Push applikasjonen til området: `cf push`
 
 
-Les om på [Running a Cloud Foundry-Hosted Application](https://developer.mindsphere.io/howto/howto-cf-running-app.html).<br>
+Les mer om prosessen på [Running a Cloud Foundry-Hosted Application](https://developer.mindsphere.io/howto/howto-cf-running-app.html).<br>
 
 
 
