@@ -44,7 +44,7 @@ class Alarmer extends React.Component {
     }
 
 
-    // Komponentens fødsel
+    // Første gang, og vil bare rendre en gang. Komponentens fødsel.
     componentDidMount() {
         
         // Forenkler header kredentials i API spørringen

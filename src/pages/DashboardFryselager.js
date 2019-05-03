@@ -1,3 +1,4 @@
+// Import av dependencies og komponenter
 import React from 'react'
 import Navigation from '../components/Navigation/Navigation'
 import {Breadcrumb, Button, Col, Alert } from 'react-bootstrap'
@@ -8,13 +9,11 @@ import Datovelger from 'react-bootstrap-daterangepicker'
 import 'bootstrap-daterangepicker/daterangepicker.css'
 import * as Icon from 'react-feather';
 import moment from "moment"
-
-// Komponenter
 import KompressorTabell from '../components/KompressorTabell'
 import ChartEnergiforbruk from '../components/ChartEnergiforbruk'
 import ChartTempFryselager from '../components/ChartTempFryselager'
 
-//API URL
+// MindSphere API URL
 const KOMP_KWH_API_URL = '/api/iottimeseries/v3/timeseries/38529181d87e4358b4b8ebe8d3479d00/KompressorerDynamiskForbruk' // ?from={FROMDATO}&to={TODATO}
 const KOMP_STATUS_DRIFT_API_URL = '/api/iottimeseries/v3/timeseries/c3bb1834c010489598967ca63e6a09fc/KompressorerStatusDriftstid'
 const TEMP_FRYSELAGER_API_URL = '/api/iottimeseries/v3/timeseries/2271ff4bcc0b48e88109909c158e0142/Temperatur_Fryser' // ?from={FROMDATO}&to={TODATO}
@@ -35,10 +34,10 @@ class DashboardFryselager extends React.Component {
           // Initiering av datovelger
           startDate: moment().subtract(1, 'days'), endDate: moment(),
   
-          // Static
+          // Static states
           loading: true, sideMenu: true, error: null,
   
-          // API States
+          // API data states
           fryserData: [], fryserTemp: [], fryserTimeStamp: [], fryserVarsel: [],
           k1Status: [], k1Forbruk: [], kForbrukTimeStamp: [], k1Driftstid: [],
           k2Status: [], k2Forbruk: [], k2Driftstid: [], 
@@ -53,7 +52,7 @@ class DashboardFryselager extends React.Component {
         this.handleRefresh = this.handleRefresh.bind(this)
     }
 
-    // Funksjon for å hente inn temperaturdata. Funksjonen tar hensyn til response limit.
+    // Funksjon for å hente inn temperaturdata. Funksjonen tar hensyn til response limit (2000)
     FetchFryseTemp(requestURL) {
         fetch(requestURL, this.HeaderCredentials)
         .then(response => {
@@ -72,7 +71,7 @@ class DashboardFryselager extends React.Component {
                     this.FetchFryseTemp(nextPageUrl)
                 }, 1500);
         } else {
-                console.log('Done fetching FryseTemp API')
+                console.log('Ferdig fetched: FryseTemp API')
                 setTimeout(() => {
                 this.setState({ 
                     fryseTempIsFetched: true
@@ -84,7 +83,7 @@ class DashboardFryselager extends React.Component {
         .catch(error => console.log('Fetching failed', error))
     }
 
-    // Funksjon for å hente inn kWh fra kompressorer. Funksjonen tar hensyn til response limit.
+    // Funksjon for å hente inn kWh fra kompressorer. Funksjonen tar hensyn til response limit (2000)
     FetchKompkWh(requestURL) {
         fetch(requestURL, this.HeaderCredentials)
         .then(response => {
@@ -105,7 +104,7 @@ class DashboardFryselager extends React.Component {
                     this.FetchKompkWh(nextPageUrl)
                 }, 1500);
         } else {
-                console.log('Done fetching Kompressor kWh API')
+                console.log('Ferdig fetched: Kompressor kWh API')
                 setTimeout(() => {
                 this.setState({ 
                     kWhIsFetched: true
@@ -133,7 +132,7 @@ class DashboardFryselager extends React.Component {
                     staticIsFetched: true
 
             })
-            console.log('Done fetching static komp API')
+            console.log('Ferdig fetched: Static komp API')
         })
         .catch(error => console.log('Fetching static komp data failed', error))    
     }
@@ -170,14 +169,15 @@ class DashboardFryselager extends React.Component {
 
     }
 
+    // "Oppdater data" knapp
     handleRefresh(){
-        // Fetch Sanntidsdata
+        // Fetch sanntidsdata kompressor
         setTimeout(() => {
             this.FetchStaticKompData(KOMP_STATUS_DRIFT_API_URL)
         }, 2000);
     }
 
-    // Første gang, og vil bare rendre en gang. Som å bli født.
+    // Første gang, og vil bare rendre en gang. Komponentens fødsel.
     componentDidMount() {
         
         // Forenkler header kredentials i API spørringene
@@ -191,7 +191,7 @@ class DashboardFryselager extends React.Component {
             }
         }
         
-        // Get XRSF token for å ta inn API
+        // Get MindSphere XRSF cookie token
         setTimeout(() => {    
             var myXRSFToken;
             var nameEQ = 'XSRF-TOKEN' + "=";
@@ -205,7 +205,7 @@ class DashboardFryselager extends React.Component {
                   
         }, 1000);
 
-        // Fetch Sanntidsdata
+        // Fetch sanntidsdata
         setTimeout(() => {
             this.FetchStaticKompData(KOMP_STATUS_DRIFT_API_URL)
         }, 2000);
@@ -214,24 +214,24 @@ class DashboardFryselager extends React.Component {
         let INITALSTART = moment(this.state.startDate._d).toISOString().slice(0,-5) + "Z"
         let INITIALEND = moment(this.state.endDate._d).toISOString().slice(0,-5) + "Z"
 
-        console.log('Initial Start: ', INITALSTART)
-        console.log('Initial End', INITIALEND)
-
+        // Fetch kompressor kWh
         setTimeout(() => {
             this.FetchKompkWh(KOMP_KWH_API_URL + '?from=' + INITALSTART + '&to=' + INITIALEND)
         }, 2000);
 
+        // Fetch frysetemp
         setTimeout(() => {
             this.FetchFryseTemp(TEMP_FRYSELAGER_API_URL + '?from=' + INITALSTART + '&to=' + INITIALEND)
         }, 2000);
 
-
+        // Setter loading false etter 3.5s
         this.myInterval = setInterval(() => { 
             this.setState({ loading: false });
         }, 3500);
 
     }
 
+    // Komponentens død
     componentWillUnmount(){
         clearInterval(this.myInterval);
     }
@@ -256,7 +256,7 @@ class DashboardFryselager extends React.Component {
           label = start;
         } 
 
-        // Deklarerer states for å slippe å bruke 'this.state' hele tiden.       
+        // Deklarerer states for å slippe å bruke 'this.state'       
         const { startDate, endDate, kForbrukTimeStamp, loading,
             k1Status, k1Forbruk, k1Driftstid, 
             k2Status, k2Forbruk, k2Driftstid, 
@@ -265,13 +265,13 @@ class DashboardFryselager extends React.Component {
             fryserData, fryseTempIsFetched, kWhIsFetched, staticIsFetched, 
             fryserTemp, fryserTimeStamp, fryserVarsel } = this.state 
         
-        // Lokale endringer i datovelger
+        // Lokale tilpasninger i datovelger
         let locale = {
             applyLabel: 'Velg dato',
             cancelLabel: 'Lukk',
         }
 
-        // Legger til annotations ved gitte variabler
+        // Legger til annotations ved gitt temperatur
         fryserData.forEach(function(element, index){
             if (element.Temperatur > -15) {
                 fryserVarsel.push(
@@ -303,12 +303,12 @@ class DashboardFryselager extends React.Component {
             <div className="page-wrapper">
                 {/* Navigation */}
                 <Navigation onClick={this._onSideMenu} />
-                {/* End Navigation */}
+                {/* Stopp Navigation */}
                 
                 <div className={`main-content d-flex flex-column ${this.state.sideMenu ? '' : 'hide-sidemenu'}`}>
                     {/* Loading */}
                     {loader}
-                    {/* Slutt Loader */}
+                    {/* Stopp Loader */}
 
                     {/* Start Breadcrumb and datepicker*/}
                     <div className="row">
@@ -342,9 +342,9 @@ class DashboardFryselager extends React.Component {
                             </Datovelger>
                         </Col>
                     </div>                               
-                    {/* Slutt Breadcrumb */}
+                    {/* Stopp Breadcrumb */}
                     
-                    {/* ColdStorageChart */}
+                    {/* ChartTempFryselager */}
                     { fryseTempIsFetched && staticIsFetched && kWhIsFetched && !loading ? 
                     <div className="loading-content">
                         <div className="row">
@@ -359,7 +359,7 @@ class DashboardFryselager extends React.Component {
                             </Col>
                         </div>
 
-                        {/* CompressorTable and EnergyConsumption */}
+                        {/* KompressorTabell and Kompressor kWh */}
                         <div className="row">
                             <Col lg={6}>
                                 <KompressorTabell
@@ -398,7 +398,7 @@ class DashboardFryselager extends React.Component {
                     {/* Footer */}
                     <div className="flex-grow-1"></div>
                     <Footer /> 
-                    {/* End Footer */}
+                    {/* Stopp Footer */}
                 </div>
             </div>
         );
