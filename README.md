@@ -33,8 +33,8 @@ Les om de ulike API-ene på [MindSphere Services](https://developer.mindsphere.i
 
 Distribusjon av løsningen til Cloud Foundry.<br>
 
-manifest.yml - Cloud Foundry konfigurasjoner.<br>
-package.json - dependencies og pakker som Cloud Foundry installerer.<br>
+[manifest.yml](manifest.yml) - Cloud Foundry konfigurasjoner.<br>
+[package.json](package.json) - dependencies som Cloud Foundry installerer.<br>
 <br>
 ### Oppskrift
 
