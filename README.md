@@ -16,28 +16,29 @@ npm start
 ```
 
 Kjør siden lokalt under utvikling.<br>
-Åpne [http://localhost:3000](http://localhost:3000) for å se siden i nettleseren.
+Åpne [http://localhost:3000](http://localhost:3000) for å se siden i nettleseren.<br>
+Innhenting av API-er fra MindSphere vil ikke fungere lokalt.<br>
 
 
 ## MindSphere API
 
 Løsningen benytter primært [IoT Time Series Service ](https://developer.mindsphere.io/apis/index.html). Det finnes flere typer API-er som kan implementeres.<br>
 
-Les om de ulike API-ene på [MindSphere API](https://developer.mindsphere.io/apis/index.html).<br>
+Les om de ulike API-ene på [MindSphere Services](https://developer.mindsphere.io/apis/index.html).<br>
 
 ## Cloud Foundry
 
-Distribuer løsningen til Cloud Foundry.<br>
+Distribusjon av løsningen til Cloud Foundry.<br>
 
 manifest.yml - Cloud Foundry konfigurasjoner.<br>
-package.json - dependencies og pakker som Cloud Foundry installerer ved distribusjon.
+package.json - dependencies og pakker som Cloud Foundry installerer.
 
 ### Oppskrift
 
 1. Åpne terminal/command prompt
-2. Gå til mappen der applikasjonen ligger: `cd mappesti/stella-polaris-dashboard`
-2. Skriv inn: `cf login -a https://api.cf.{region}.{mindsphere-domain} --sso`
-3. Klikk på lenken i terminalen, logg inn med din MindSphere konto for å få en <i>One Time Code</i>.
+2. Gå til applikasjonsmappen `cd mappesti/stella-polaris-dashboard`
+2. Skriv inn `cf login -a https://api.cf.{region}.{mindsphere-domain} --sso`
+3. Klikk på lenken i terminalen, logg inn med MindSphere konto for å få en <i>One Time Code</i>.
 4. Skriv inn <i>One Time Code</i> fra steget ovenfor i terminalen.
 5. Velg org og område: `cf target -o {org_name} -s {space_name}`
 7. Push applikasjonen til området: `cf push`
