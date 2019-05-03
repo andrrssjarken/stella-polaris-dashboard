@@ -1,17 +1,18 @@
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
-import DashboardFryselager from '../pages/DashboardFryselager';
+// Import av sider
+import React from "react"
+import { Route, Redirect } from "react-router-dom"
+import DashboardFryselager from '../pages/DashboardFryselager'
 import DashboardKontor from '../pages/DashboardKontor'
-import DashboardKokeprosess from "../pages/DashboardKokeprosess";
-import Alarmer from '../pages/Alarmer';
-import DatatabellFryselager from '../pages/DatatabellFryselager';
-import DatatabellKontor from '../pages/DatatabellKontor';
-import Brukermanual from '../pages/Brukermanual';
+import DashboardKokeprosess from "../pages/DashboardKokeprosess"
+import Alarmer from '../pages/Alarmer'
+import DatatabellFryselager from '../pages/DatatabellFryselager'
+import DatatabellKontor from '../pages/DatatabellKontor'
+import Brukermanual from '../pages/Brukermanual'
 
-import '../assets/css/style.css';
-import '../assets/css/responsive.css';
+import '../assets/css/style.css'
+import '../assets/css/responsive.css'
 
-
+// React linking og routing
 const AppRouter = () => (
     <React.Fragment>
         <Route exact path="/" render={() => (
@@ -25,6 +26,6 @@ const AppRouter = () => (
         <Route path="/datatabell-fryselager/" component={DatatabellFryselager} />  
         <Route path="/brukermanual/" component={Brukermanual} />
     </React.Fragment>
-);
+)
 
-export default AppRouter;
+export default AppRouter
