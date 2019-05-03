@@ -6,25 +6,18 @@
     "default": [
       {
         "type": "WWW",
-        "name": "Application manual",
-        "value": "https://anbmedia.no"
+        "name": "Support",
+        "value": "mailto:abe113@uit.no"
       },
-      {
-        "type": "WWW",
-        "name": "Developer information",
-        "value": "https://anbmedia.no"
-      },
-      {
-        "type": "WWW",
-        "name": "About Stella Polaris",
-        "value": "http://www.stellapolaris.no/"
-      }
-    ],
-    "no": [
       {
         "type": "WWW",
         "name": "Utviklerinformasjon",
-        "value": "https://anbmedia.no"
+        "value": "https://github.com/andrrssjarken/stella-polaris-dashboard"
+      },
+      {
+        "type": "WWW",
+        "name": "Om Stella Polaris",
+        "value": "http://www.stellapolaris.no/"
       }
     ]
   }
