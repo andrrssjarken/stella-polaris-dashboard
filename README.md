@@ -21,7 +21,7 @@ Innhenting av API-er fra MindSphere vil ikke fungere lokalt.<br>
 ## Lokalt utviklingsområde
 Applikasjon er utviklet med React og React bootstrap.<br>
 
-Se [package.json](stella-polaris-dashboard/package.json) for fullstendig liste dependencies.
+Se [package.json](package.json) for fullstendig liste dependencies.
 
 
 ## MindSphere API
