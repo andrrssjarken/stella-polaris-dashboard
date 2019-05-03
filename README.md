@@ -8,7 +8,7 @@ Se [video av brukergrensesnittet](https://#).<br>
 
 ## Lokalt utviklingsområde
 
-Åpne terminal/command prompt og utfør følgende steg:
+Åpne terminal/ledetekst og utfør følgende steg:
 ```
 cd stella-polaris-dashboard
 npm install
@@ -35,7 +35,7 @@ package.json - dependencies og pakker som Cloud Foundry installerer.
 
 ### Oppskrift
 
-1. Åpne terminal/command prompt
+1. Åpne terminal/ledetekst
 2. Gå til applikasjonsmappen `cd mappesti/stella-polaris-dashboard`
 2. Skriv inn `cf login -a https://api.cf.{region}.{mindsphere-domain} --sso`
 3. Klikk på lenken i terminalen, logg inn med MindSphere konto for å få en <i>One Time Code</i>.
