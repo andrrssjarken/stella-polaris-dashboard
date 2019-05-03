@@ -1,5 +1,5 @@
 # Stella Polaris Dashboard
-Denne webapplikasjonen er en del av bacheloroppgaven i automasjon ved [Universitetet i Tromsø - Norges Arktiske universitet](https://uit.no/startsida).<br>
+Denne applikasjonen er en del av bacheloroppgaven i automasjon ved [Universitetet i Tromsø - Norges Arktiske universitet](https://uit.no/startsida).<br>
 
 Oppgaven er gitt av [Haneseth Automasjon](automasjon.haneseth.no) og levert 15. mai 2019<br>
 
@@ -15,9 +15,13 @@ npm install
 npm start
 ```
 
-Kjør siden lokalt under utvikling.<br>
 Åpne [http://localhost:3000](http://localhost:3000) for å se siden i nettleseren.<br>
 Innhenting av API-er fra MindSphere vil ikke fungere lokalt.<br>
+
+## Lokalt utviklingsområde
+Applikasjon er utviklet med React og React bootstrap.<br>
+
+Se [package.json](stella-polaris-dashboard/package.json) for fullstendig liste dependencies.
 
 
 ## MindSphere API
