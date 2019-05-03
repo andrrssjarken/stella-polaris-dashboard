@@ -18,7 +18,7 @@ npm start
 Åpne [http://localhost:3000](http://localhost:3000) for å se siden i nettleseren.<br>
 Innhenting av API-er fra MindSphere vil ikke fungere lokalt.<br>
 
-## Lokalt utviklingsområde
+## Språk og dependencies
 Applikasjon er utviklet med React og React bootstrap.<br>
 
 Se [package.json](package.json) for fullstendig liste med dependencies.
