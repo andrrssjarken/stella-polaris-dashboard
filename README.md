@@ -24,7 +24,7 @@ Applikasjon er utviklet med React og React bootstrap.<br>
 Se [package.json](package.json) for en fullstendig liste over dependencies.<br>
 <br>
 
-### MindSphere API
+## MindSphere API
 Løsningen benytter primært [IoT Time Series Service ](https://developer.mindsphere.io/apis/index.html). Det finnes flere typer API-er som kan implementeres.<br>
 
 Les om de ulike API-ene på [MindSphere Services](https://developer.mindsphere.io/apis/index.html).<br>
