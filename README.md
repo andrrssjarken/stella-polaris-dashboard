@@ -46,7 +46,7 @@ package.json - dependencies og pakker som Cloud Foundry installerer.
 
 Les mer om prosessen på [Running a Cloud Foundry-Hosted Application](https://developer.mindsphere.io/howto/howto-cf-running-app.html).<br>
 
-## Mulige forberedninger
+## Mulige forbedringer
 
 - [ ] Se på mulighetene for å benytte [IoT Time Series Aggregates Service](https://developer.mindsphere.io/apis/iot-iottsaggregates/api-iottsaggregates-overview.html)
 - [ ] Kompressortabell oppdateres automatisk ved ny data (loop).
