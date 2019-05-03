@@ -21,7 +21,7 @@ Innhenting av API-er fra MindSphere vil ikke fungere lokalt.<br>
 ## Språk og dependencies
 Applikasjon er utviklet med React og React bootstrap.<br>
 
-Se [package.json](package.json) for en fullstendig liste over dependencies.
+Se [package.json](package.json) for en fullstendig liste over dependencies.<br>
 
 <br>
 ## MindSphere API
@@ -35,8 +35,8 @@ Les om de ulike API-ene på [MindSphere Services](https://developer.mindsphere.i
 Distribusjon av løsningen til Cloud Foundry.<br>
 
 manifest.yml - Cloud Foundry konfigurasjoner.<br>
-package.json - dependencies og pakker som Cloud Foundry installerer.
-
+package.json - dependencies og pakker som Cloud Foundry installerer.<br>
+<br>
 ### Oppskrift
 
 1. Åpne terminal/ledetekst
@@ -49,7 +49,7 @@ package.json - dependencies og pakker som Cloud Foundry installerer.
 
 
 Les mer om prosessen på [Running a Cloud Foundry-Hosted Application](https://developer.mindsphere.io/howto/howto-cf-running-app.html).<br>
-
+<br>
 ## Mulige forbedringer
 
 - [ ] Se på mulighetene for å benytte [IoT Time Series Aggregates Service](https://developer.mindsphere.io/apis/iot-iottsaggregates/api-iottsaggregates-overview.html)
