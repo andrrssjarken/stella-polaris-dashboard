@@ -58,7 +58,7 @@ class Alarmer extends React.Component {
             }
         }
         
-        // Get XRSF cookie token
+        // Get MindSphere XRSF cookie token
         setTimeout(() => {    
             var myXRSFToken;
             var nameEQ = 'XSRF-TOKEN' + "=";

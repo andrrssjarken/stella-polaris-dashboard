@@ -1,3 +1,4 @@
+// Import av dependencies og komponenter
 import React from 'react';
 import {Row, Col, Alert, Breadcrumb, Table, Button} from 'react-bootstrap';
 import { Link } from "react-router-dom";
@@ -9,7 +10,7 @@ import 'bootstrap-daterangepicker/daterangepicker.css'
 import * as Icon from 'react-feather';
 import moment from "moment"
 
-//API URL
+// MindSphere API URL
 const TEMP_FRYSELAGER_API_URL = '/api/iottimeseries/v3/timeseries/2271ff4bcc0b48e88109909c158e0142/Temperatur_Fryser' // ?from={FROMDATO}&to={TODATO}
 
 // Test API URL
@@ -19,13 +20,14 @@ class DatatabellFryselager extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            // Static
+
+            // Static states
             loading: true, sideMenu: true, error: null,
 
             // Initiering av datovelger
             startDate: moment().subtract(1, 'days'), endDate: moment(),
 
-            // API States
+            // API data states
             apiData: [],
 
             // isFetched states
@@ -35,7 +37,7 @@ class DatatabellFryselager extends React.Component {
         this.handleApply = this.handleApply.bind(this)
     }
 
-    // Funksjon for å hente inn temperaturdata og fuktighet Funksjonen tar hensyn til response limit.
+    // Funksjon for å hente inn temperaturdata og fuktighet Funksjonen tar hensyn til response limit (2000)
     FetchAPI(requestURL) {
         fetch(requestURL, this.HeaderCredentials)
         .then(response => {
@@ -65,8 +67,9 @@ class DatatabellFryselager extends React.Component {
     }
 
 
-    // Loading icon false after DOM loaded
+   // Første gang, og vil bare rendre en gang. Komponentens fødsel
     componentDidMount() {
+
         // Forenkler header kredentials i API spørringene
         let HeaderCredentials = {
             credentials: 'include',
@@ -78,7 +81,7 @@ class DatatabellFryselager extends React.Component {
             }
         }
         
-        // Get XRSF token for å ta inn API
+        // Get MindSphere XRSF cookie token
         setTimeout(() => {    
             var myXRSFToken;
             var nameEQ = 'XSRF-TOKEN' + "=";
@@ -96,18 +99,19 @@ class DatatabellFryselager extends React.Component {
         let INITALSTART = moment(this.state.startDate._d).toISOString().slice(0,-5) + "Z"
         let INITIALEND = moment(this.state.endDate._d).toISOString().slice(0,-5) + "Z"
 
-
+        // Fetcher fryselagerdata initielt
         setTimeout(() => {
             this.FetchAPI(TEMP_FRYSELAGER_API_URL + '?from=' + INITALSTART + '&to=' + INITIALEND)
         }, 2000);
         
-
+        // Setter loading false etter 3.5s
         this.myInterval = setInterval(() => { 
             this.setState({ loading: false });
         }, 3500);
 
     }
 
+    // Komponentens død
     componentWillUnmount(){
         clearInterval(this.myInterval);
     }
@@ -173,12 +177,12 @@ class DatatabellFryselager extends React.Component {
             <div className="page-wrapper">
                 {/* Navigation */}
                 <Navigation onClick={this._onSideMenu} />
-                {/* End Navigation */}
+                {/* Stopp Navigation */}
 
                 <div className={`main-content d-flex flex-column ${this.state.sideMenu ? '' : 'hide-sidemenu'}`}>
                     {/* Loader */}
                     {loader}
-                    {/* End Loader */}
+                    {/* Stopp Loader */}
 
                     {/* Start Breadcrumb and datepicker*/}
                     <div className="row">
@@ -215,7 +219,7 @@ class DatatabellFryselager extends React.Component {
                             </Datovelger>
                         </Col>
                     </div>                               
-                    {/* Slutt Breadcrumb */}
+                    {/* Stopp Breadcrumb */}
 
                     {/* Basic Table */}
                     <Row>
@@ -226,7 +230,8 @@ class DatatabellFryselager extends React.Component {
                                     <div className="card-header">
                                         <h5 className="card-title">Datatabell</h5>
                                     </div>
-                                    
+
+                                    {/* Tabellheader */}
                                     <Table responsive hover className="m-0">
                                         <thead>
                                             <tr>
@@ -235,7 +240,9 @@ class DatatabellFryselager extends React.Component {
                                                 <th className="text-center">Temperatur °C</th>
                                             </tr>
                                         </thead>
+                                        {/* Stopp Tabellheader */}
 
+                                        {/* Tabellrader - Itererer gjennom data og lager rader*/}
                                         <tbody>
                                             {
                                                 this.state.apiData.map((item, key) => {
@@ -248,8 +255,8 @@ class DatatabellFryselager extends React.Component {
 
                                                 })
                                             }
-
                                         </tbody>
+                                        {/* Stopp Tabellrader */}
                                     </Table>
                                 </div>
                             </div> : <Alert variant="info">
@@ -257,12 +264,12 @@ class DatatabellFryselager extends React.Component {
                     </Alert>}
                         </Col>
                     </Row>
-                    {/* End Basic Table */}
+                    {/* Stopp Basic Table */}
 
                     {/* Footer  */}    
                     <div className="flex-grow-1"></div>
                     <Footer />
-                    {/* End Footer  */}   
+                    {/* Stopp Footer  */}   
                 </div>
             </div>
         );

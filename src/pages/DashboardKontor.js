@@ -69,7 +69,7 @@ class DashboardKontor extends React.Component {
     }
 
 
-    // Første gang, og vil bare rendre en gang. Komponentens fødsel.
+    // Første gang, og vil bare rendre en gang. Komponentens fødsel
     componentDidMount() {
 
         // Forenkler header kredentials i API spørringene
@@ -97,10 +97,11 @@ class DashboardKontor extends React.Component {
                     
         }, 1000);
 
-        // Få initialdata
+        // Få initialdato
         let INITALSTART = moment(this.state.startDate._d).toISOString().slice(0,-5) + "Z"
         let INITIALEND = moment(this.state.endDate._d).toISOString().slice(0,-5) + "Z"
         
+        // Fetcher kontor data initielt
         setTimeout(() => {
             this.FetchAPI(KONTOR_API_URL + '?from=' + INITALSTART + '&to=' + INITIALEND)
         }, 2000);

@@ -92,22 +92,23 @@ class DatatabellKontor extends React.Component {
                     
         }, 1000);
 
-        // Få initialdata
+        // Få initialdato
         let INITALSTART = moment(this.state.startDate._d).toISOString().slice(0,-5) + "Z"
         let INITIALEND = moment(this.state.endDate._d).toISOString().slice(0,-5) + "Z"
 
-
+        // Fetcher kontor data initielt      
         setTimeout(() => {
             this.FetchAPI(KONTOR_API_URL + '?from=' + INITALSTART + '&to=' + INITIALEND)
         }, 2000);
         
-
+        // Setter loading false etter 3.5s
         this.myInterval = setInterval(() => { 
             this.setState({ loading: false });
         }, 3500);
 
     }
 
+    // Komponentens død
     componentWillUnmount(){
         clearInterval(this.myInterval);
     }
@@ -226,7 +227,8 @@ class DatatabellKontor extends React.Component {
                                     <div className="card-header">
                                         <h5 className="card-title">Datatabell</h5>
                                     </div>
-                                    
+
+                                    {/* Tabellheader */}                           
                                     <Table responsive hover className="m-0">
                                         <thead>
                                             <tr>
@@ -236,7 +238,9 @@ class DatatabellKontor extends React.Component {
                                                 <th className="text-center">Fuktighet %</th>
                                             </tr>
                                         </thead>
-
+                                        {/* Stopp Tabellheader */}
+                                      
+                                        {/* Tabellrader - Itererer gjennom data og lager rader*/}
                                         <tbody>
                                             {
                                                 this.state.apiData.map((item, key) => {
@@ -250,8 +254,8 @@ class DatatabellKontor extends React.Component {
 
                                                 })
                                             }
-
                                         </tbody>
+                                        {/* Stopp Tabellrader */}
                                     </Table>
                                 </div>
                             </div> : <Alert variant="info">
@@ -259,12 +263,12 @@ class DatatabellKontor extends React.Component {
                     </Alert>}
                         </Col>
                     </Row>
-                    {/* End Basic Table */}
+                    {/* Stopp Basic Table */}
 
                     {/* Footer  */}    
                     <div className="flex-grow-1"></div>
                     <Footer />
-                    {/* End Footer  */}   
+                    {/* Stopp Footer  */}   
                 </div>
             </div>
         );
