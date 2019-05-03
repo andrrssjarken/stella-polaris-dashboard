@@ -4,7 +4,7 @@ import Chart from 'react-apexcharts'
 
 class ChartEnergiforbruk extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             options: {
                 chart: {
@@ -84,4 +84,4 @@ class ChartEnergiforbruk extends React.Component {
     }
 }
 
-export default ChartEnergiforbruk;
+export default ChartEnergiforbruk

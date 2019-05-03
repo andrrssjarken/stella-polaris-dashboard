@@ -4,7 +4,7 @@ import Chart from 'react-apexcharts'
 
 class ChartTempFryselager extends React.Component {
     constructor(props) {    
-        super(props);
+        super(props)
         this.state = {
             options: {
                 annotations: {
@@ -84,4 +84,4 @@ class ChartTempFryselager extends React.Component {
     }
 }
 
-export default ChartTempFryselager;
+export default ChartTempFryselager

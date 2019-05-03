@@ -73,4 +73,4 @@ class ChartTempKontor extends React.Component {
     }
 }
 
-export default ChartTempKontor;
+export default ChartTempKontor

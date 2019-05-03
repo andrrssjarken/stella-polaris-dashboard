@@ -186,4 +186,4 @@ class ChartTempKokeprosess extends React.Component {
     }
 }
 
-export default ChartTempKokeprosess;
+export default ChartTempKokeprosess

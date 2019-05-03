@@ -1,8 +1,9 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import {Navbar, Nav, NavDropdown} from 'react-bootstrap';
-import * as Icon from 'react-feather';
-import './SideMenu.css';
+// Import av dependencies og komponenter
+import React from 'react'
+import { NavLink } from 'react-router-dom'
+import {Navbar, Nav, NavDropdown} from 'react-bootstrap'
+import * as Icon from 'react-feather'
+import './SideMenu.css'
 
 class SideMenuDark extends React.Component {
     render() { 
@@ -91,4 +92,4 @@ class SideMenuDark extends React.Component {
     }
 }
 
-export default SideMenuDark;
+export default SideMenuDark

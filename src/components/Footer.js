@@ -1,6 +1,7 @@
 // Import av dependencies og komponenter
 import React from 'react'
 
+// Footer med kreditering
 class Footer extends React.Component {
     render(){
         return(
@@ -13,4 +14,4 @@ class Footer extends React.Component {
     }
 }
 
-export default Footer;
+export default Footer

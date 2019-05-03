@@ -80,4 +80,4 @@ class KompressorTabell extends React.Component {
     }
 }
 
-export default KompressorTabell;
+export default KompressorTabell
