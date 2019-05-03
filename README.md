@@ -1,6 +1,7 @@
 # Stella Polaris Dashboard
-Denne webapplikasjonen er en del av en bachelor i automasjon ved Universitetet i Tromsø.<br>
-Oppgaven er gitt av Haneseth Automasjon [https://automasjon.haneseth.no](automasjon.haneseth.no) og utført av Anders Nystad Bendiksen, Erlend Willassen og Jonas Nordal.<br>
+Denne webapplikasjonen er en del av en bachelor i automasjon ved [Universitetet i Tromsø - Norges Arktiske universitet](https://uit.no/startsida)<br>
+<br>
+Oppgaven er gitt av [Haneseth Automasjon](automasjon.haneseth.no) og levert 15. mai 2019<br>
 
 Se [rapporten i sin helhet](https://#).<br>
 Se [video av brukergrensesnittet](https://#).<br>
@@ -17,9 +18,7 @@ Kjør siden lokalt under utvikling.<br>
 Åpne [http://localhost:3000](http://localhost:3000) for å se siden i nettleseren.
 
 
-# MindSphere
-
-### MindSphere API
+# MindSphere API
 
 Les om de ulike API-ene på [MindSphere API](https://developer.mindsphere.io/apis/index.html).<br>
 
