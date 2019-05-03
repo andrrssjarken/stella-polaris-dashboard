@@ -1,3 +1,4 @@
+// Import av dependencies og komponenter
 import React from 'react';
 import Navigation from '../components/Navigation/Navigation';
 import {Breadcrumb, Col, Button, Alert} from 'react-bootstrap';
@@ -7,11 +8,9 @@ import Datovelger from 'react-bootstrap-daterangepicker'
 import 'bootstrap-daterangepicker/daterangepicker.css'
 import * as Icon from 'react-feather';
 import moment from "moment"
-
-import { Link } from "react-router-dom";
 import ChartTempKontor from '../components/ChartTempKontor'
 
-//API URL
+// MindSphere API URL
 const KONTOR_API_URL = '/api/iottimeseries/v3/timeseries/d014986bc5cb497fa4bced744e1afaa3/EnviromentData' // ?from={FROMDATO}&to={TODATO}
 
 // Test API URL
@@ -38,7 +37,7 @@ class DashboardKontor extends React.Component {
         this.handleApply = this.handleApply.bind(this);
     }
 
-    // Funksjon for å hente inn temperaturdata og fuktighet Funksjonen tar hensyn til response limit.
+    // Funksjon for å hente inn temperaturdata og fuktighet Funksjonen tar hensyn til response limit (2000)
     FetchAPI(requestURL) {
         fetch(requestURL, this.HeaderCredentials)
         .then(response => {
@@ -57,7 +56,7 @@ class DashboardKontor extends React.Component {
                     this.FetchAPI(nextPageUrl)
                 }, 1500);
         } else {
-                console.log('Done fetching FryseTemp API')
+                console.log('Ferdig fetched: Kontor temp og humid')
                 setTimeout(() => {
                 this.setState({ 
                     KontorIsFetched: true
@@ -70,8 +69,9 @@ class DashboardKontor extends React.Component {
     }
 
 
-    // Loading icon false after DOM loaded
+    // Første gang, og vil bare rendre en gang. Komponentens fødsel.
     componentDidMount() {
+
         // Forenkler header kredentials i API spørringene
         let HeaderCredentials = {
             credentials: 'include',
@@ -83,7 +83,7 @@ class DashboardKontor extends React.Component {
             }
         }
         
-        // Get XRSF token for å ta inn API
+        // Get MindSphere XRSF cookie token
         setTimeout(() => {    
             var myXRSFToken;
             var nameEQ = 'XSRF-TOKEN' + "=";
@@ -105,16 +105,14 @@ class DashboardKontor extends React.Component {
             this.FetchAPI(KONTOR_API_URL + '?from=' + INITALSTART + '&to=' + INITIALEND)
         }, 2000);
 
-        console.log('Initial Start: ', INITALSTART)
-        console.log('Initial End', INITIALEND)
-        
-
+        // Setter loading false etter 3.5s
         this.myInterval = setInterval(() => { 
             this.setState({ loading: false });
         }, 3500);
 
     }
 
+    // Komponentens død
     componentWillUnmount(){
         clearInterval(this.myInterval);
     }
@@ -140,10 +138,6 @@ class DashboardKontor extends React.Component {
         let APISTARTDATO = moment(this.state.startDate._d).toISOString().slice(0,-5) + "Z"
         let APISLUTTDATO = moment(this.state.endDate._d).toISOString().slice(0,-5) + "Z"
 
-        console.log('Ny Startdato: ', APISTARTDATO)
-        console.log('Ny Sluttdato: ', APISLUTTDATO)
-
-    
         // Starter ny fething her
         setTimeout(() => {
             this.FetchAPI(KONTOR_API_URL + '?from=' + APISTARTDATO + '&to=' + APISLUTTDATO)
@@ -152,7 +146,7 @@ class DashboardKontor extends React.Component {
     }
     
     render() {
-        // Deklarerer states for å slippe å bruke 'this.state' hele tiden.       
+        // Deklarerer states for å slippe å bruke 'this.state'     
         const { temperature, humidity, timeStamp, KontorIsFetched, loading} = this.state 
 
         // Loadingspinner
@@ -179,12 +173,12 @@ class DashboardKontor extends React.Component {
             <div className="page-wrapper">
                 {/* Navigation */}
                 <Navigation onClick={this._onSideMenu} />
-                {/* End Navigation */}
+                {/* Stopp Navigation */}
                 
                 <div className={`main-content d-flex flex-column ${this.state.sideMenu ? '' : 'hide-sidemenu'}`}>
                     {/* Loader */}
                     {loader}
-                    {/* End Loader */}
+                    {/* Stopp Loader */}
 
                     {/* Start Breadcrumb and datepicker*/}
                     <div className="row">
@@ -219,9 +213,9 @@ class DashboardKontor extends React.Component {
                             </Datovelger>
                         </Col>
                     </div>                               
-                    {/* Slutt Breadcrumb */}
+                    {/* Stopp Breadcrumb */}
 
-                    {/* Kontorchart */}
+                    {/* ChartTempKontor */}
                     { KontorIsFetched && !loading ? 
                     <div className="row">
                         <Col lg={12}>
@@ -234,11 +228,12 @@ class DashboardKontor extends React.Component {
                     </div> : <Alert variant="info">
                      Laster inn data fra MindSphere. Vennligst vent.
                     </Alert>}
+                    {/* Stopp ChartTempKontor */}
 
                     {/* Footer */}
                     <div className="flex-grow-1"></div>
                     <Footer /> 
-                    {/* End Footer */}
+                    {/* Stopp Footer */}
                 </div>
             </div>
         );

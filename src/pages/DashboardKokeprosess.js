@@ -1,3 +1,4 @@
+// Import av dependencies og komponenter
 import React from 'react';
 import Navigation from '../components/Navigation/Navigation';
 import {Breadcrumb, Col, Button, Alert} from 'react-bootstrap';
@@ -7,9 +8,9 @@ import Datovelger from 'react-bootstrap-daterangepicker'
 import 'bootstrap-daterangepicker/daterangepicker.css'
 import * as Icon from 'react-feather';
 import moment from "moment"
-
-import { Link } from "react-router-dom";
 import ChartTempKokeprosess from '../components/ChartTempKokeprosess'
+
+/* Henter inn dummydata, ikke API */
 
 class DashboardKokeprosess extends React.Component {
 
@@ -25,7 +26,7 @@ class DashboardKokeprosess extends React.Component {
         }
     }
 
-    // Loading icon false after DOM loaded
+    // Første gang, og vil bare rendre en gang. Komponentens fødsel.
     componentDidMount() {
 
         this.myInterval = setInterval(() => { 
@@ -34,6 +35,7 @@ class DashboardKokeprosess extends React.Component {
 
     }
 
+    // Komponentens død
     componentWillUnmount(){
         clearInterval(this.myInterval);
     }
@@ -44,6 +46,7 @@ class DashboardKokeprosess extends React.Component {
     }
 
     // Funksjon for å handle datovelger
+    // Ikke aktiv på sidne pga dummydata
     handleApply(event, picker){
         this.setState({
             startDate: picker.startDate,
@@ -54,13 +57,10 @@ class DashboardKokeprosess extends React.Component {
         let APISTARTDATO = moment(this.state.startDate._d).toISOString().slice(0,-5) + "Z"
         let APISLUTTDATO = moment(this.state.endDate._d).toISOString().slice(0,-5) + "Z"
 
-        console.log('Startdato: ', APISTARTDATO)
-        console.log('Sluttdato: ', APISLUTTDATO)
-
     }
     
     render() {
-        // Deklarerer states for å slippe å bruke 'this.state' hele tiden.       
+        // Deklarerer states for å slippe å bruke 'this.state'       
         const {loading} = this.state 
 
         // Loadingspinner
@@ -87,12 +87,12 @@ class DashboardKokeprosess extends React.Component {
             <div className="page-wrapper">
                 {/* Navigation */}
                 <Navigation onClick={this._onSideMenu} />
-                {/* End Navigation */}
+                {/* Stopp Navigation */}
                 
                 <div className={`main-content d-flex flex-column ${this.state.sideMenu ? '' : 'hide-sidemenu'}`}>
                     {/* Loader */}
                     {loader}
-                    {/* End Loader */}
+                    {/* Stopp Loader */}
 
                     {/* Start Breadcrumb and datepicker*/}
                     <div className="row">
@@ -126,9 +126,9 @@ class DashboardKokeprosess extends React.Component {
                             </Datovelger>
                         </Col>
                     </div>                               
-                    {/* Slutt Breadcrumb */}
+                    {/* Stopp Breadcrumb */}
 
-                    {/* Kontorchart */}
+                    {/* ChartTempKokeprosess */}
                     { !loading ? 
                     <div className="row">
                         <Col lg={12}>
@@ -138,10 +138,12 @@ class DashboardKokeprosess extends React.Component {
                      Laster inn statisk dummydata. Vennligst vent.
                     </Alert>}
 
+                    {/* Stopp ChartTempKokeprosess */}
+
                     {/* Footer */}
                     <div className="flex-grow-1"></div>
                     <Footer /> 
-                    {/* End Footer */}
+                    {/* Stopp Footer */}
                 </div>
             </div>
         );

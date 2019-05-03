@@ -4,7 +4,6 @@ import Navigation from '../components/Navigation/Navigation'
 import {Breadcrumb, Button, Col, Alert } from 'react-bootstrap'
 import Footer from '../components/Footer'
 import Loader from '../components/Common/Loader'
-import { Link } from "react-router-dom"
 import Datovelger from 'react-bootstrap-daterangepicker'
 import 'bootstrap-daterangepicker/daterangepicker.css'
 import * as Icon from 'react-feather';
