@@ -1,24 +1,16 @@
+// Import av dependencies og komponenter
 import React from 'react'
 import {Row, Col, Breadcrumb, Alert, Table} from 'react-bootstrap'
-import { Link } from "react-router-dom"
 import Loader from '../components/Common/Loader'
 import Navigation from '../components/Navigation/Navigation'
 import Footer from '../components/Footer'
 import moment from "moment"
 
-// API URL
+// MindSphere API URL
 const ALARM_API_URL = '/api/eventmanagement/v3/events?page=0&size=20&sort=timestamp%2Cdesc&history=false'
 
 // Test API URL
 const TEST_ALARM_API_URL = 'http://labs.anbmedia.no/json/API/Alarmer.json'
-
-
-/*
-embedded.events.timestamp
-embedded.events.entityID
-embedded.events.acknowledged
-embedded.events.description
-*/
 
 class Alarmer extends React.Component {
     constructor(props){
@@ -36,8 +28,7 @@ class Alarmer extends React.Component {
 
     }
 
-    // Funksjon for å hente de 20 siste inn alarmene.
-    // Henter inn siste statiske data for kompressorer. Status og drifttid.
+    // Funksjon for å hente de 20 siste alarmene.
     FetchAPI(requestURL) {
         fetch(requestURL, this.HeaderCredentials)
             .then(res => res.json())
@@ -53,10 +44,10 @@ class Alarmer extends React.Component {
     }
 
 
-    // Loading icon false after DOM loaded
+    // Komponentens fødsel
     componentDidMount() {
         
-        // Forenkler header kredentials i API spørringene
+        // Forenkler header kredentials i API spørringen
         let HeaderCredentials = {
             credentials: 'include',
             headers: {
@@ -67,7 +58,7 @@ class Alarmer extends React.Component {
             }
         }
         
-        // Get XRSF token for å ta inn API
+        // Get XRSF cookie token
         setTimeout(() => {    
             var myXRSFToken;
             var nameEQ = 'XSRF-TOKEN' + "=";
@@ -86,13 +77,14 @@ class Alarmer extends React.Component {
             this.FetchAPI(ALARM_API_URL)
         }, 2000);
         
-
+        // Setter loading false etter 3.5s
         this.myInterval = setInterval(() => { 
             this.setState({ loading: false });
         }, 3500);
 
     }
 
+    // Komponentens død
     componentWillUnmount(){
         clearInterval(this.myInterval);
     }
@@ -104,7 +96,7 @@ class Alarmer extends React.Component {
 
     render() {
 
-        // Deklarerer states for å slippe å bruke 'this.state' hele tiden.       
+        // Deklarerer states for å slippe å bruke 'this.state'       
         const { loading, alarmsIsFetched} = this.state 
 
         // Loadingspinner
@@ -117,12 +109,12 @@ class Alarmer extends React.Component {
             <div className="page-wrapper">
                 {/* Navigation */}
                 <Navigation onClick={this._onSideMenu} />
-                {/* End Navigation */}
+                {/* Stopp Navigation */}
 
                 <div className={`main-content d-flex flex-column ${this.state.sideMenu ? '' : 'hide-sidemenu'}`}>
                     {/* Loading */}
                     {loader}
-                    {/* Slutt Loader */}
+                    {/* Stopp Loader */}
 
                     {/* Breadcrumb */}
                     <div className="main-content-header">
@@ -131,7 +123,9 @@ class Alarmer extends React.Component {
                             <Breadcrumb.Item active>Oversikt over alarmer</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    {/* End Breadcrumb */}
+                    {/* Stopp Breadcrumb */}
+
+                    {/* Alarmtabell */}
                     <Row>
                         <Col xl={12}>
                             { alarmsIsFetched && !loading ? 
@@ -140,7 +134,7 @@ class Alarmer extends React.Component {
                                     <div className="card-header">
                                         <h5 className="card-title">Datatabell</h5>
                                     </div>
-                                    
+                                    {/* Tabellheader */}
                                     <Table responsive hover className="m-0">
                                         <thead>
                                             <tr>
@@ -151,7 +145,10 @@ class Alarmer extends React.Component {
                                                 <th className="text-center">Anerkjent</th>
                                             </tr>
                                         </thead>
-
+                                        {/* Stopp Tabellheader */}
+                                        
+                                        {/* Datarader */}
+                                        {/* Itererer gjennom data og generere rader */}
                                         <tbody>
                                             {
                                                 this.state.alarmData._embedded.events.map((item, key) => {
@@ -169,18 +166,21 @@ class Alarmer extends React.Component {
                                                 })
                                             }
                                         </tbody>
+                                        {/* Stopp datarader */}
 
                                     </Table>
                                 </div>
                             </div> : <Alert variant="info">
-                     Laster inn data fra MindSphere. Vennligst vent.
+                     Laster inn data fra MindSphere. Vennligst vent. {/* Terneries / Conditional logikk */}
                     </Alert>}
                         </Col>
                     </Row>
+                    {/* Stopp Alarmtabell */}
+
                     {/* Footer  */}    
                     <div className="flex-grow-1"></div>
                     <Footer />
-                    {/* End Footer  */}   
+                    {/* Stopp Footer  */}   
                 </div>
             </div>
         );
