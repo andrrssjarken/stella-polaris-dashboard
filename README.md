@@ -21,7 +21,7 @@ Innhenting av API-er fra MindSphere vil ikke fungere lokalt.<br>
 ## Språk og dependencies
 Applikasjon er utviklet med React og React bootstrap.<br>
 
-Se [package.json](package.json) for fullstendig liste med dependencies.
+Se [package.json](package.json) for en fullstendig liste over dependencies.
 
 
 ## MindSphere API
