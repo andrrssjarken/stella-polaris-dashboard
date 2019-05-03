@@ -368,7 +368,7 @@ class DashboardFryselager extends React.Component {
                                     k1_status={k1Status}
 
                                     k2_driftstid={k2Driftstid}
-                                    k2_forbruk={k2Forbruk[k3Forbruk.length-1]}
+                                    k2_forbruk={k2Forbruk[k2Forbruk.length-1]}
                                     k2_status={k2Status}
 
                                     k3_driftstid={k3Driftstid}
