@@ -1,4 +1,5 @@
-import React from 'react';
+// Import av dependencies og komponenter
+import React from 'react'
 import Chart from 'react-apexcharts'
 
 const series = 

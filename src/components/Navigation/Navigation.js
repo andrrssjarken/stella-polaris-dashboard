@@ -1,20 +1,14 @@
-import React from 'react';
-import { withRouter, Link } from 'react-router-dom';
-import './Navigation.css';
-import {
-    Navbar, 
-    Nav, 
-    Image,
-    Button
-} from 'react-bootstrap';
+// Import av dependencies og komponenter
+import React from 'react'
+import { withRouter, Link } from 'react-router-dom'
+import './Navigation.css'
+import {Navbar, Nav, Image, Button} from 'react-bootstrap'
+import SideMeny from './SideMenu/SideMeny'
+import LiveClock from '../Common/LiveClock'
 
-// Default dark side menu
-import SideMeny from './SideMenu/SideMeny';
-
-// Logo image path
-import Logo from '../../assets/img/stella_polaris_logo.png';
-import SmallLogo from '../../assets/img/stella_polaris_small-logo.png';
-import LiveClock from '../Common/LiveClock';
+// Logo bilder
+import Logo from '../../assets/img/stella_polaris_logo.png'
+import SmallLogo from '../../assets/img/stella_polaris_small-logo.png'
 
 class Navigation extends React.Component {
     state = {
@@ -24,11 +18,12 @@ class Navigation extends React.Component {
     };
 
     _toggleClass = () => {
-        const currentSideMenu = this.state.sideMenu;
-        this.setState({sideMenu: !currentSideMenu});
-        this.props.onClick(this.state.sideMenu);
+        const currentSideMenu = this.state.sideMenu
+        this.setState({sideMenu: !currentSideMenu})
+        this.props.onClick(this.state.sideMenu)
     }
 
+    // Printfunksjon for "Generer rapport" (Burde forbedres)
     print(){
         window.print();
     }
@@ -38,9 +33,9 @@ class Navigation extends React.Component {
             <div className="page-wrapper">
                 <Navbar fixed="top" className="top-menu">
                     <Link to="/dashboard-fryselager" className={`navbar-brand ${this.state.sideMenu ? 'navbar-logo' : ''}`}>
-                        {/* Large logo */}
+                        {/* Stor logo */}
                         <Image src={Logo} alt="Logo" className="large-logo" /> 
-                        {/* Small logo */}
+                        {/* Liten logo */}
                         <Image src={SmallLogo} alt="Small Logo" className="small-logo" /> 
                     </Link>
 
@@ -52,7 +47,7 @@ class Navigation extends React.Component {
                         <span className="middle-bar"></span>
                         <span className="bottom-bar"></span> 
                     </div>
-                    {/* End Burger menu */}
+                    {/* Stopp Burger menu */}
  
                     <Nav className="ml-auto right-nav navbar-nav">
                         {/* Sett inn klokke her*/}
@@ -67,8 +62,8 @@ class Navigation extends React.Component {
                 <SideMeny sideMenu={this.state.sideMenu} />
                                     
             </div>
-        );
+        )
     }
 }
 
-export default withRouter(Navigation);
+export default withRouter(Navigation)

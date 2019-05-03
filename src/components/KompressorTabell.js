@@ -1,5 +1,6 @@
-import React from 'react';
-import { Table, Button } from 'react-bootstrap';
+// Import av dependencies og komponenter
+import React from 'react'
+import { Table, Button } from 'react-bootstrap'
 
 class KompressorTabell extends React.Component {
 
