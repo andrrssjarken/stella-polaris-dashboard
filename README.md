@@ -5,7 +5,7 @@ Oppgaven er gitt av [Haneseth Automasjon](automasjon.haneseth.no) og levert 15. 
 
 Se [rapporten i sin helhet](https://#).<br>
 Se [video av brukergrensesnittet](https://#).<br>
-
+<br>
 ## Lokalt utviklingsområde
 
 Åpne terminal/ledetekst og utfør følgende steg:
@@ -17,19 +17,19 @@ npm start
 
 Åpne [http://localhost:3000](http://localhost:3000) for å se siden i nettleseren.<br>
 Innhenting av API-er fra MindSphere vil ikke fungere lokalt.<br>
-
+<br>
 ## Språk og dependencies
 Applikasjon er utviklet med React og React bootstrap.<br>
 
 Se [package.json](package.json) for en fullstendig liste over dependencies.
 
-
+<br>
 ## MindSphere API
 
 Løsningen benytter primært [IoT Time Series Service ](https://developer.mindsphere.io/apis/index.html). Det finnes flere typer API-er som kan implementeres.<br>
 
 Les om de ulike API-ene på [MindSphere Services](https://developer.mindsphere.io/apis/index.html).<br>
-
+<br>
 ## Cloud Foundry
 
 Distribusjon av løsningen til Cloud Foundry.<br>
