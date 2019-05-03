@@ -1,13 +1,14 @@
 # Stella Polaris Dashboard
 Denne webapplikasjonen er en del av en bachelor i automasjon ved [Universitetet i Tromsø - Norges Arktiske universitet](https://uit.no/startsida)<br>
-<br>
+
 Oppgaven er gitt av [Haneseth Automasjon](automasjon.haneseth.no) og levert 15. mai 2019<br>
 
 Se [rapporten i sin helhet](https://#).<br>
 Se [video av brukergrensesnittet](https://#).<br>
 
-# Start utviklingsområde
+## Lokalt utviklingsområde
 
+Åpne terminal/command prompt og utfør følgende steg:
 ```
 cd stella-polaris-dashboard
 npm install
@@ -18,21 +19,23 @@ Kjør siden lokalt under utvikling.<br>
 Åpne [http://localhost:3000](http://localhost:3000) for å se siden i nettleseren.
 
 
-# MindSphere API
+## MindSphere API
+
+Løsningen benytter primært [IoT Time Series Service ](https://developer.mindsphere.io/apis/index.html). Det finnes flere typer API-er som kan implementeres.<br>
 
 Les om de ulike API-ene på [MindSphere API](https://developer.mindsphere.io/apis/index.html).<br>
 
-# Cloud Foundry
+## Cloud Foundry
 
-Etter at løsningen er i produksjonsmodus må det distribueres til Cloud Foundry.
+Distribuer løsningen til Cloud Foundry.<br>
 
-manifest.yml inneholder Cloud Foundry konfigurasjon.
-package.json inneholder dependencies og pakker som Cloud Foundry installerer ved distribusjon.
+manifest.yml - Cloud Foundry konfigurasjoner.<br>
+package.json - dependencies og pakker som Cloud Foundry installerer ved distribusjon.
 
 ### Oppskrift
 
 1. Åpne terminal/command prompt
-2. Gå til mappen der applikasjonen ligger: `cd mappesti`
+2. Gå til mappen der applikasjonen ligger: `cd mappesti/stella-polaris-dashboard`
 2. Skriv inn: `cf login -a https://api.cf.{region}.{mindsphere-domain} --sso`
 3. Klikk på lenken i terminalen, logg inn med din MindSphere konto for å få en <i>One Time Code</i>.
 4. Skriv inn <i>One Time Code</i> fra steget ovenfor i terminalen.
