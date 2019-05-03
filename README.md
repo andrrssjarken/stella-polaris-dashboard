@@ -46,6 +46,9 @@ package.json - dependencies og pakker som Cloud Foundry installerer.
 
 Les mer om prosessen på [Running a Cloud Foundry-Hosted Application](https://developer.mindsphere.io/howto/howto-cf-running-app.html).<br>
 
+## Mulige forberedninger
 
-
+- [] Finish my changes
+- [ ] Push my commits to GitHub
+- [ ] Open a pull request
 
