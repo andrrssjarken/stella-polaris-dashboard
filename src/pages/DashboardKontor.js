@@ -85,15 +85,15 @@ class DashboardKontor extends React.Component {
         
         // Get MindSphere XRSF cookie token
         setTimeout(() => {    
-            var myXRSFToken;
-            var nameEQ = 'XSRF-TOKEN' + "=";
-            var ca = document.cookie.split(';');
+            var myXRSFToken
+            var nameEQ = 'XSRF-TOKEN' + "="
+            var ca = document.cookie.split(';')
             for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) === 0) myXRSFToken = c.substring(nameEQ.length, c.length);
+              var c = ca[i]
+              while (c.charAt(0) === ' ') c = c.substring(1, c.length)
+              if (c.indexOf(nameEQ) === 0) myXRSFToken = c.substring(nameEQ.length, c.length)
             }      
-            console.log("myXRSFToken: " + myXRSFToken);
+            console.log("myXRSFToken: " + myXRSFToken)
                     
         }, 1000);
 
@@ -108,19 +108,19 @@ class DashboardKontor extends React.Component {
 
         // Setter loading false etter 3.5s
         this.myInterval = setInterval(() => { 
-            this.setState({ loading: false });
+            this.setState({ loading: false })
         }, 3500);
 
     }
 
     // Komponentens død
     componentWillUnmount(){
-        clearInterval(this.myInterval);
+        clearInterval(this.myInterval)
     }
 
     // Toggle side bar menu
     _onSideMenu = (active) => {
-        this.setState({sideMenu: active});
+        this.setState({sideMenu: active})
     }
 
     // Funksjon for å handle datovelger
@@ -157,11 +157,11 @@ class DashboardKontor extends React.Component {
         }
 
         // Label på datovelger
-        let start = this.state.startDate.format('DD.MM.YYYY');
-        let end = this.state.endDate.format('DD.MM.YYYY');
-        let label = start + ' - ' + end;
+        let start = this.state.startDate.format('DD.MM.YYYY')
+        let end = this.state.endDate.format('DD.MM.YYYY')
+        let label = start + ' - ' + end
         if (start === end) {
-            label = start;
+            label = start
         }
 
         // Lokale endringer i datovelger

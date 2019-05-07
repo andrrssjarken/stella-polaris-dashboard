@@ -60,15 +60,15 @@ class Alarmer extends React.Component {
         
         // Get MindSphere XRSF cookie token
         setTimeout(() => {    
-            var myXRSFToken;
-            var nameEQ = 'XSRF-TOKEN' + "=";
-            var ca = document.cookie.split(';');
+            var myXRSFToken
+            var nameEQ = 'XSRF-TOKEN' + "="
+            var ca = document.cookie.split(';')
             for (var i = 0; i < ca.length; i++) {
-              var c = ca[i];
-              while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-              if (c.indexOf(nameEQ) === 0) myXRSFToken = c.substring(nameEQ.length, c.length);
+              var c = ca[i]
+              while (c.charAt(0) === ' ') c = c.substring(1, c.length)
+              if (c.indexOf(nameEQ) === 0) myXRSFToken = c.substring(nameEQ.length, c.length)
             }      
-            console.log("myXRSFToken: " + myXRSFToken);
+            console.log("myXRSFToken: " + myXRSFToken)
                   
         }, 1000);
 
@@ -86,12 +86,12 @@ class Alarmer extends React.Component {
 
     // Komponentens død
     componentWillUnmount(){
-        clearInterval(this.myInterval);
+        clearInterval(this.myInterval)
     }
 
     // Toggle side bar menu
     _onSideMenu = (active) => {
-        this.setState({sideMenu: active});
+        this.setState({sideMenu: active})
     }
 
     render() {

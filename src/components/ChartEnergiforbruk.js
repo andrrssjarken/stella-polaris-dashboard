@@ -60,12 +60,6 @@ class ChartEnergiforbruk extends React.Component {
             ],
         }
     }
-
-    componentDidMount(){
-        console.log('kWIn')
-        console.log(this.props.k1kWhIn)
-
-    }
     
     render() {
 

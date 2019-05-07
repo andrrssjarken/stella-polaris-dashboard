@@ -2,7 +2,6 @@
 import React from 'react'
 import Chart from 'react-apexcharts'
 
-
 class ChartTempKontor extends React.Component {
     
     constructor(props) { 
