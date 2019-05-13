@@ -1,10 +1,9 @@
 # Stella Polaris Dashboard
-Denne applikasjonen er en del av bacheloroppgaven i automasjon ved [Universitetet i Tromsø - Norges Arktiske universitet](https://uit.no/startsida).<br>
+Denne applikasjonen er en del av bacheloroppgaven i studiet automatiseringsteknikk ved [Universitetet i Tromsø - Norges Arktiske universitet](https://uit.no/startsida).<br>
 
 Oppgaven er gitt av [Haneseth Automasjon](automasjon.haneseth.no) og levert 15. mai 2019.<br>
 
-Se [rapporten i sin helhet](https://#).<br>
-Se [video av brukergrensesnittet](https://#).<br>
+Se [video av brukergrensesnittet](https://youtu.be/cAJ91OXOyAM).<br>
 <br>
 ## Lokalt utviklingsområde
 Krever Node.js.
